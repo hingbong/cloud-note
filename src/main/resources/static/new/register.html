@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>注册</title>
+  <link href="css/build.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+<header class="Header js-details-container Details flex-wrap flex-lg-nowrap p-responsive"
+        role="banner">
+  <div class="container-xl d-lg-flex flex-items-center p-responsive">
+    <nav class="subnav" aria-label="Respository">
+      <a href="login.html" class="HeaderMenu-link no-underline mr-3" aria-current="page">登录</a>
+      <a class="HeaderMenu-link d-inline-block no-underline border border-gray-dark rounded-1 px-2 py-1"
+         href="index.html">返回首页</a>
+    </nav>
+  </div>
+</header>
+<article>
+  <div class="mx-auto col-sm-8 col-md-6 hide-sm container">
+    <h1 class="h000-mktg text-white lh-condensed-ultra mb-3">注册</h1>
+    <div class="rounded-1 text-gray bg-gray-light py-4 px-4 px-md-3 px-lg-4">
+      <form class="home-hero-signup js-signup-form" action="/user" method="post" id="reg"
+            onsubmit="send_form(this,'post','login.html');return false;">
+        <dl class="form-group mt-0">
+          <dt class="input-label">
+            <label class="form-label f5" for="username">用户名: </label>
+          </dt>
+          <dd>
+            <input type="text" class="form-control form-control-lg input-block" name="username"
+                   id="username">
+          </dd>
+        </dl>
+        <dl class="form-group mt-0">
+          <dt class="input-label">
+            <label class="form-label f5" for="nickname">昵称: </label>
+          </dt>
+          <dd>
+            <input type="text" class="form-control form-control-lg input-block" name="nickname"
+                   id="nickname">
+          </dd>
+        </dl>
+        <dl class="form-group mt-0">
+          <dt class="input-label">
+            <label class="form-label f5" for="password">密码: </label>
+          </dt>
+          <dd>
+            <input type="password" class="form-control form-control-lg input-block" name="password"
+                   id="password">
+          </dd>
+        </dl>
+        <p class="is-error" id="notice"></p>
+        <div class="form-actions">
+          <input type="submit" class="btn-mktg btn-primary-mktg f5" value="注册">
+          <input type="reset" class="btn-mktg f5" value="重置" onclick="clear_notice()">
+        </div>
+      </form>
+    </div>
+  </div>
+</article>
+<script src="js/main.js"></script>
+<script>
+  const clear_notice = () => document.querySelector('#notice').innerText = '';
+</script>
+</body>
+</html>

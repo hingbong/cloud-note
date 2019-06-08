@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>我的笔记</title>
+  <link href="css/build.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+<header class="Header js-details-container Details flex-wrap flex-lg-nowrap p-responsive"
+        role="banner">
+  <div class="container-xl d-lg-flex flex-items-center p-responsive">
+    <nav class="subnav" aria-label="Respository">>
+      <a class="subnav-item selected" onclick="logout();return false">注销</a>
+    </nav>
+  </div>
+</header>
+<article>
+  <div id="notebook_div" class="mx-auto col-sm-8 col-md-6 hide-sm container">
+    <h1 class="h000-mktg text-white lh-condensed-ultra mb-3">我的笔记</h1>
+    <div class="rounded-1 text-gray bg-gray-light py-4 px-4 px-md-3 px-lg-4">
+      <a href="new_note.html">添加笔记</a>
+      <ul id="note" class="list-style-none">
+
+      </ul>
+    </div>
+  </div>
+</article>
+<script src="js/main.js"></script>
+<script>
+  const param = getQueryStringParameters();
+  const modify_page = (e) => location.href = `modify_note.html?nid=${e}`;
+  fetch(`/note/${param.nbId}`, {
+    method: 'get'
+  }).then(res => res.json()).then(json => {
+    const note = document.querySelector('#note');
+    if (json.code === 1) {
+      json.data.forEach(ele => {
+        if (note) {
+          note.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="note.html?nid=${ele.nid}">${ele.title}</a>
+          <button class="btn"  onclick="deleteN('note',${ele.nid})">删除</button>
+          <button class="btn"  onclick="modify_page(${ele.nid})">编辑</button>
+          </li>`;
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>

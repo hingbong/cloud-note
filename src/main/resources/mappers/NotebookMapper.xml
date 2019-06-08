@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.hingbong.cloudnote.mapper.NotebookMapper">
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="nbId">
+    INSERT INTO t_notebook (title, is_deleted, uid)
+    VALUES (#{title}, #{isDeleted}, #{uid});
+  </insert>
+
+  <select id="findByTitle" resultType="io.github.hingbong.cloudnote.entity.Notebook">
+    SELECT nb_id nbId, title, is_deleted isDeleted, uid
+    FROM t_notebook
+    WHERE title = #{title}
+  </select>
+
+  <select id="findByNbId" resultType="io.github.hingbong.cloudnote.entity.Notebook">
+    SELECT nb_id nbId, title, is_deleted isDeleted, uid
+    FROM t_notebook
+    where nb_id = #{nbId}
+  </select>
+
+  <select id="findAllByUid" resultType="io.github.hingbong.cloudnote.entity.Notebook">
+    SELECT nb_id nbId, title, is_deleted isDeleted, uid
+    FROM t_notebook
+    WHERE uid = #{uid}
+    ORDER BY nb_id DESC;
+  </select>
+
+  <update id="updateNotebook">
+    UPDATE t_notebook
+    SET title=#{title}
+    WHERE nb_id = #{nbId}
+  </update>
+
+  <update id="markDeleted">
+    UPDATE t_notebook
+    SET is_deleted = 1
+    WHERE nb_id = #{nbId}
+  </update>
+
+  <delete id="delete">
+    DELETE
+    FROM t_notebook
+    WHERE nb_id = #{nbId}
+  </delete>
+
+</mapper>

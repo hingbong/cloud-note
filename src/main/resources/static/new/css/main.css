@@ -1,0 +1,33 @@
+.js-signup-form {
+  margin: 20px auto;
+}
+
+body {
+  background-color: #6a737d;
+}
+
+header {
+  background: #24292e;
+  padding: 8px 0;
+  height: 56px;
+  z-index: 32;
+}
+
+header div {
+  float: right;
+}
+
+header div nav a {
+  color: white;
+}
+
+article {
+  background-image: url("../images/background.svg");
+  background-repeat: no-repeat;
+  background-position-x: center;
+  height: 80vh;
+}
+
+#notebook_div {
+
+}

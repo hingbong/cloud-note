@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.hingbong.cloudnote.mapper.NoteMapper">
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="nid">
+    INSERT INTO t_note (title, content, is_shared, is_deleted, nb_id)
+    VALUES (#{title}, #{content}, #{isShared}, #{isDeleted}, #{nbId})
+  </insert>
+
+
+  <select id="findAll" resultType="io.github.hingbong.cloudnote.entity.Note">
+    SELECT nid, title, content, is_shared isShared, is_deleted isDeleted, nb_id nbId
+    FROM t_note
+  </select>
+
+  <select id="getOneByNid" resultType="io.github.hingbong.cloudnote.entity.Note">
+    SELECT nid, title, content, is_shared isShared, is_deleted isDeleted, nb_id nbId
+    FROM t_note
+    WHERE nid = #{nid}
+  </select>
+
+  <update id="markIsDeleted">
+    UPDATE t_note
+    SET is_deleted = 1
+    WHERE nid = #{nid}
+  </update>
+
+  <update id="updateNote">
+    UPDATE t_note
+    SET title   = #{title},
+        content = #{content}
+    WHERE nid = #{nid}
+  </update>
+
+</mapper>

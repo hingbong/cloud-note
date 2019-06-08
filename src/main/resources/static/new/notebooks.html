@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>记事本</title>
+  <link href="css/build.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+<header class="Header js-details-container Details flex-wrap flex-lg-nowrap p-responsive"
+        role="banner">
+  <div class="container-xl d-lg-flex flex-items-center p-responsive">
+    <nav class="subnav" aria-label="Respository">>
+      <a class="subnav-item selected" onclick="logout();return false">注销</a>
+    </nav>
+  </div>
+</header>
+<article>
+  <div id="notebook_div" class="mx-auto col-sm-8 col-md-6 hide-sm container">
+    <h1 class="h000-mktg text-white lh-condensed-ultra mb-3">我的记事本</h1>
+    <div class="rounded-1 text-gray bg-gray-light py-4 px-4 px-md-3 px-lg-4">
+      <ul id="notebook" class="list-style-none">
+
+      </ul>
+      <form action="/notebook" method="post"
+            onsubmit="send_form(this,'post','notebook.html');return false;">
+        <input class="form-control" name="title" placeholder="添加记事本"
+               style="max-width: 200px" aria-label="">
+        <input type="submit" class="btn" value="添加">
+      </form>
+    </div>
+  </div>
+</article>
+<script src="js/main.js"></script>
+<script>
+  fetch('/notebook', {
+    method: 'get'
+  }).then(res => res.json()).then(json => {
+    const notebook = document.querySelector('#notebook');
+    if (json.code === 1) {
+      json.data.forEach(ele => {
+        if (notebook) {
+          notebook.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="notes.html?nbId=${ele.nbId}">${ele.title}</a>
+          <button class="btn" onclick="deleteN('notebook',${ele.nbId})">删除</button>
+          <button class="btn" onclick="modify(${ele.nbId})">编辑</button>
+          </li>`;
+        }
+      });
+    }
+  }).catch(() => location.replace('index.html'));
+</script>
+</body>
+</html>

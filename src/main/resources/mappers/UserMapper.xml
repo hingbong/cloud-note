@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.hingbong.cloudnote.mapper.UserMapper">
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="uid">
+    INSERT INTO t_user (username, nickname, password, salt)
+    VALUES (#{username}, #{nickname}, #{password}, #{salt})
+  </insert>
+
+  <select id="findUserByUsername" resultType="io.github.hingbong.cloudnote.entity.User">
+    SELECT uid, username, nickname, password, salt
+    FROM t_user
+    WHERE username = #{username}
+  </select>
+
+  <update id="updatePassword">
+    UPDATE t_user
+    SET password=#{password}
+    WHERE uid = #{uid}
+  </update>
+
+  <select id="findByUid" resultType="io.github.hingbong.cloudnote.entity.User">
+    SELECT uid, username, password, nickname, salt
+    FROM t_user
+    WHERE uid = #{uid}
+  </select>
+</mapper>
