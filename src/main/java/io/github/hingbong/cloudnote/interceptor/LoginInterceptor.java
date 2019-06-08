@@ -13,7 +13,7 @@ public class LoginInterceptor implements HandlerInterceptor {
       throws Exception {
     String uid = "uid";
     if (request.getSession().getAttribute(uid) == null) {
-      response.sendRedirect("/new/login.html");
+      response.sendRedirect("login.html");
       return false;
     }
     return true;

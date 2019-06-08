@@ -17,12 +17,12 @@ public class LoginInterceptorConfig implements WebMvcConfigurer {
         .addInterceptor(loginInterceptor)
         .addPathPatterns("/**")
         .excludePathPatterns(
-            "/new/css/**",
-            "/new/images/**",
-            "/new/js/**",
-            "/new/login.html",
-            "/new/register.html",
-            "/new/index.html",
+            "/css/**",
+            "/images/**",
+            "/js/**",
+            "/login.html",
+            "/register.html",
+            "/index.html",
             "/user",
             "/user/session");
   }
