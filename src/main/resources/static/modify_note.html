@@ -49,26 +49,33 @@
 <script src="js/main.js"></script>
 <script>
   const param = getQueryStringParameters();
-  fetch(`/note/note/${param.nid}`).then(res => res.json()).then(json => {
-    if (json.code === 1) {
-      const note = json.data;
-      document.querySelector('#nid').value = note.nid;
-      document.querySelector('#title').value = note.title;
-      document.querySelector('#content').value = note.content;
-      fetch('/notebook').then(res => res.json()).then(json => {
-        if (json.code === 1) {
-          json.data.forEach(ele => {
-            const notebook = document.querySelector('#notebook');
-            if (ele.nbId === note.nbId) {
-              notebook.innerHTML += `<option selected value="${ele.nbId}">${ele.title}</option>`;
-            } else {
-              notebook.innerHTML += `<option value="${ele.nbId}">${ele.title}</option>`;
-            }
-          })
-        }
-      });
+  fetch(`/note/note/${param.nid}`).then(res = > res.json();
+  ).then(json = > {
+    if(json.code === 1;
+  )
+  {
+    const note = json.data;
+    document.querySelector('#nid').value = note.nid;
+    document.querySelector('#title').value = note.title;
+    document.querySelector('#content').value = note.content;
+    fetch('/notebook').then(res = > res.json();
+  ).
+    then(json = > {
+      if(json.code === 1;
+  )
+    {
+      json.data.forEach(ele = > {
+        const notebook = document.querySelector('#notebook');
+      if (ele.nbId === note.nbId) {
+        notebook.innerHTML += `<option selected value="${ele.nbId}">${ele.title}</option>`;
+      } else {
+        notebook.innerHTML += `<option value="${ele.nbId}">${ele.title}</option>`;
+      }
+    })
     }
-  });
+  })
+  }
+  })
 </script>
 </body>
 </html>

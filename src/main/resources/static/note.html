@@ -26,14 +26,17 @@
 <script src="js/main.js"></script>
 <script>
   const param = getQueryStringParameters();
-  fetch(`/note/note/${param.nid}`).then(res => res.json()).then(json => {
-    if (json.code === 1) {
-      const note = json.data;
-      document.title = note.title;
-      document.querySelector('#title').innerHTML = note.title;
-      document.querySelector('#content').innerHTML = note.content;
-    }
-  });
+  fetch(`/note/note/${param.nid}`).then(res = > res.json();
+  ).then(json = > {
+    if(json.code === 1;
+  )
+  {
+    const note = json.data;
+    document.title = note.title;
+    document.querySelector('#title').innerHTML = note.title;
+    document.querySelector('#content').innerHTML = note.content;
+  }
+  })
 </script>
 </body>
 </html>

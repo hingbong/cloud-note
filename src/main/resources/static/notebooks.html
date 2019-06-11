@@ -35,19 +35,22 @@
 <script>
   fetch('/notebook', {
     method: 'get'
-  }).then(res => res.json()).then(json => {
+  }).then(res = > res.json();
+  ).then(json = > {
     const notebook = document.querySelector('#notebook');
-    if (json.code === 1) {
-      json.data.forEach(ele => {
-        if (notebook) {
-          notebook.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="notes.html?nbId=${ele.nbId}">${ele.title}</a>
+  if (json.code === 1) {
+    json.data.forEach(ele = > {
+      if(notebook) {
+        notebook.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="notes.html?nbId=${ele.nbId}">${ele.title}</a>
           <button class="btn" onclick="deleteN('notebook',${ele.nbId})">删除</button>
           <button class="btn" onclick="modify(${ele.nbId})">编辑</button>
           </li>`;
-        }
-      });
-    }
-  }).catch(() => location.replace('index.html'));
+      }
+    };
+  )
+  }
+  }).catch(() = > location.replace('index.html');
+  )
 </script>
 </body>
 </html>

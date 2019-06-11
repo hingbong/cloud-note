@@ -29,22 +29,26 @@
 <script src="js/main.js"></script>
 <script>
   const param = getQueryStringParameters();
-  const modify_page = (e) => location.href = `modify_note.html?nid=${e}`;
+  const modify_page = (e) =;
+  >
+  location.href = `modify_note.html?nid=${e}`;
   fetch(`/note/${param.nbId}`, {
     method: 'get'
-  }).then(res => res.json()).then(json => {
+  }).then(res = > res.json();
+  ).then(json = > {
     const note = document.querySelector('#note');
-    if (json.code === 1) {
-      json.data.forEach(ele => {
-        if (note) {
-          note.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="note.html?nid=${ele.nid}">${ele.title}</a>
+  if (json.code === 1) {
+    json.data.forEach(ele = > {
+      if(note) {
+        note.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="note.html?nid=${ele.nid}">${ele.title}</a>
           <button class="btn"  onclick="deleteN('note',${ele.nid})">删除</button>
           <button class="btn"  onclick="modify_page(${ele.nid})">编辑</button>
           </li>`;
-        }
-      });
-    }
-  });
+      }
+    };
+  )
+  }
+  })
 </script>
 </body>
 </html>
