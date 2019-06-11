@@ -33,4 +33,6 @@ public interface UserService {
    * @param newPassword    new password
    */
   void changePassword(Integer uid, String originPassword, String newPassword);
+
+  User findByUid(Integer uid);
 }

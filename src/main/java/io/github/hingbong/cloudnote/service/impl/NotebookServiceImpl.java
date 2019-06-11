@@ -1,16 +1,14 @@
 package io.github.hingbong.cloudnote.service.impl;
 
 import io.github.hingbong.cloudnote.entity.Notebook;
-import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.mapper.NotebookMapper;
-import io.github.hingbong.cloudnote.mapper.UserMapper;
 import io.github.hingbong.cloudnote.service.NotebookService;
+import io.github.hingbong.cloudnote.service.UserService;
 import io.github.hingbong.cloudnote.service.excption.DuplicateTitleException;
 import io.github.hingbong.cloudnote.service.excption.FormatNotMatchException;
 import io.github.hingbong.cloudnote.service.excption.InsertException;
 import io.github.hingbong.cloudnote.service.excption.NotebookNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
-import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class NotebookServiceImpl implements NotebookService {
 
   private NotebookMapper notebookMapper;
-  private UserMapper userMapper;
+  private UserService userService;
 
   @Override
   public void addNotebook(String title, Integer uid) {
@@ -32,7 +30,6 @@ public class NotebookServiceImpl implements NotebookService {
     Notebook notebook = new Notebook(title, 0, uid);
     insert(notebook);
   }
-
 
   @Override
   public void modifyTitle(Integer nbId, String title, Integer uid) {
@@ -50,7 +47,6 @@ public class NotebookServiceImpl implements NotebookService {
     // get non-deleted notebook and set isDelete to null
     return selectAll(uid);
   }
-
 
   @Override
   public void delete(Integer uid, Integer nbId) {
@@ -94,10 +90,7 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   private void checkUser(Integer uid) {
-    User user = userMapper.findByUid(uid);
-    if (user == null) {
-      throw new UserNotFoundException("用户未登录");
-    }
+    userService.findByUid(uid);
   }
 
   private void checkTitle(String title, Integer uid) {
@@ -118,10 +111,15 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   private void checkNotebok(Integer nbId) {
-    Notebook byNbId = notebookMapper.findByNbId(nbId);
+    Notebook byNbId = findByNbId(nbId);
     if (byNbId == null) {
       throw new NotebookNotFoundException("无此记事本");
     }
+  }
+
+  @Override
+  public Notebook findByNbId(Integer nbId) {
+    return notebookMapper.findByNbId(nbId);
   }
 
   private void checkNotebook(String title) {
@@ -131,12 +129,12 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   @Autowired
-  public void setUserMapper(UserMapper userMapper) {
-    this.userMapper = userMapper;
+  private void setUserService(UserService userService) {
+    this.userService = userService;
   }
 
   @Autowired
-  public void setNotebookMapper(NotebookMapper notebookMapper) {
+  private void setNotebookMapper(NotebookMapper notebookMapper) {
     this.notebookMapper = notebookMapper;
   }
 }

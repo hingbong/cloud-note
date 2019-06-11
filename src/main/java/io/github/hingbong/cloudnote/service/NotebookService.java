@@ -12,4 +12,6 @@ public interface NotebookService {
   List<Notebook> findAllByUid(Integer uid);
 
   void delete(Integer uid, Integer nbId);
+
+  Notebook findByNbId(Integer nbId);
 }

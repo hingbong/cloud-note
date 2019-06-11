@@ -28,11 +28,11 @@ public class UserServiceImpl implements UserService {
     checkUser(user);
 
     // find user by username to check whether the username is in use
-    User user1 = userMapper.findUserByUsername(user.getUsername());
-    if (user1 != null) {
+    User userInDb = findUserByUsername(user.getUsername());
+
+    if (userInDb != null) {
       throw new DuplicateUsernameException("此用户名已被占用");
     }
-
     // random uuid
     String salt = UUID.randomUUID().toString();
     // encrypt the password
@@ -40,11 +40,7 @@ public class UserServiceImpl implements UserService {
     user.setSalt(salt);
     user.setPassword(sha3Password);
 
-    Integer insert = userMapper.insert(user);
-    // check the insert result
-    if (insert < 1) {
-      throw new InsertException("注册失败");
-    }
+    insertUser(user);
   }
 
   @Override
@@ -55,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // find user in db by username
-    User userInDb = userMapper.findUserByUsername(username);
+    User userInDb = findUserByUsername(username);
     // if can't find the user in db, that's username or password wrong
     if (userInDb == null) {
       throw new UserNotFoundException("用户名或密码错误");
@@ -77,17 +73,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void changePassword(Integer uid, String originPassword, String newPassword) {
-    if (originPassword == null
-        || newPassword == null
-        || "".equals(newPassword)
-        || "".equals(originPassword)) {
-      throw new PasswordNotMatchException("密码错误");
-    }
+    checkPasswordValid(originPassword, newPassword);
 
-    User user = userMapper.findByUid(uid);
-    if (user == null) {
-      throw new UserNotFoundException("用户还未登录");
-    }
+    User user = findByUid(uid);
 
     String originSha3Password = getSha3Password(originPassword, user.getSalt());
     if (!originSha3Password.equals(user.getPassword())) {
@@ -95,12 +83,46 @@ public class UserServiceImpl implements UserService {
     }
     String newSha3Password = getSha3Password(newPassword, user.getSalt());
 
+    updateUser(uid, newSha3Password);
+  }
+
+  @Override
+  public User findByUid(Integer uid) {
+    User user = userMapper.findByUid(uid);
+    if (user == null) {
+      throw new UserNotFoundException("用户还未登录");
+    }
+    return user;
+  }
+
+  private void updateUser(Integer uid, String newSha3Password) {
     Integer integer = userMapper.updatePassword(uid, newSha3Password);
     if (!integer.equals(1)) {
       throw new UpdateException("未知错误");
     }
   }
 
+  private void checkPasswordValid(String originPassword, String newPassword) {
+    if (originPassword == null
+        || newPassword == null
+        || "".equals(newPassword)
+        || "".equals(originPassword)) {
+      throw new PasswordNotMatchException("密码错误");
+    }
+  }
+
+  private void insertUser(User user) {
+    Integer insert = userMapper.insert(user);
+    // check the insert result
+    if (insert < 1) {
+      throw new InsertException("注册失败");
+    }
+  }
+
+  private User findUserByUsername(String username) {
+    User user = userMapper.findUserByUsername(username);
+    return user;
+  }
   /**
    * check a user
    *
@@ -125,7 +147,7 @@ public class UserServiceImpl implements UserService {
    *  encrypt password by sha-3 256 with uuid three times
    *
    * @param password origin password
-   * @param salt     uuid
+   * @param salt uuid
    * @return encrypted password
    */
   private String getSha3Password(String password, String salt) {
@@ -139,7 +161,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Autowired
-  public void setUserMapper(UserMapper userMapper) {
+  private void setUserMapper(UserMapper userMapper) {
     this.userMapper = userMapper;
   }
 }

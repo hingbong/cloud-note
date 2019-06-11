@@ -3,8 +3,8 @@ package io.github.hingbong.cloudnote.service.impl;
 import io.github.hingbong.cloudnote.entity.Note;
 import io.github.hingbong.cloudnote.entity.Notebook;
 import io.github.hingbong.cloudnote.mapper.NoteMapper;
-import io.github.hingbong.cloudnote.mapper.NotebookMapper;
 import io.github.hingbong.cloudnote.service.NoteSerivce;
+import io.github.hingbong.cloudnote.service.NotebookService;
 import io.github.hingbong.cloudnote.service.excption.InvalidNoteException;
 import io.github.hingbong.cloudnote.service.excption.NoteNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.NotebookNotFoundException;
@@ -19,12 +19,12 @@ import org.springframework.stereotype.Service;
 public class NoteSerivceImpl implements NoteSerivce {
 
   private NoteMapper noteMapper;
-  private NotebookMapper notebookMapper;
+  private NotebookService notebookService;
 
   @Override
   public void addNote(Integer uid, Note note) {
     checkNote(note);
-    Notebook notebook = notebookMapper.findByNbId(note.getNbId());
+    Notebook notebook = notebookService.findByNbId(note.getNbId());
     checkNotebook(uid, note, notebook);
     note.setIsShared(0);
     note.setIsDeleted(0);
@@ -37,7 +37,7 @@ public class NoteSerivceImpl implements NoteSerivce {
     if (nbId == null) {
       throw new NotebookNotFoundException("无此记事本");
     }
-    Notebook notebook = notebookMapper.findByNbId(nbId);
+    Notebook notebook = notebookService.findByNbId(nbId);
     if (notebook == null) {
       throw new NotebookNotFoundException("无此记事本");
     }
@@ -59,7 +59,7 @@ public class NoteSerivceImpl implements NoteSerivce {
   @Override
   public void modifyNote(Integer uid, Note note) {
     if (note.getNbId() != null) {
-      Notebook notebook = notebookMapper.findByNbId(note.getNbId());
+      Notebook notebook = notebookService.findByNbId(note.getNbId());
       if (!uid.equals(notebook.getUid())) {
         throw new UserNotFoundException("请选择正确的笔记");
       }
@@ -87,7 +87,7 @@ public class NoteSerivceImpl implements NoteSerivce {
     if (note == null) {
       throw new NoteNotFoundException("无此笔记");
     }
-    Notebook notebook = notebookMapper.findByNbId(note.getNbId());
+    Notebook notebook = notebookService.findByNbId(note.getNbId());
     if (!uid.equals(notebook.getUid())) {
       throw new UserNotFoundException("请选择正确的笔记");
     }
@@ -127,12 +127,12 @@ public class NoteSerivceImpl implements NoteSerivce {
   }
 
   @Autowired
-  public void setNotebookMapper(NotebookMapper notebookMapper) {
-    this.notebookMapper = notebookMapper;
+  public void setNotebookService(NotebookService notebookService) {
+    this.notebookService = notebookService;
   }
 
   @Autowired
-  public void setNoteMapper(NoteMapper noteMapper) {
+  private void setNoteMapper(NoteMapper noteMapper) {
     this.noteMapper = noteMapper;
   }
 }
