@@ -5,6 +5,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * intercept not login user
+ *
+ * @author Hingbong
+ */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 

@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * implement of UserService
+ *
  * @author Hingbong
  */
 @Service
@@ -120,8 +122,7 @@ public class UserServiceImpl implements UserService {
   }
 
   private User findUserByUsername(String username) {
-    User user = userMapper.findUserByUsername(username);
-    return user;
+    return userMapper.findUserByUsername(username);
   }
   /**
    * check a user

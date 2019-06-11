@@ -68,7 +68,7 @@ public class UserController extends BaseController {
       @RequestParam("origin_password") String originPassword,
       @RequestParam("new_password") String newPassword,
       HttpSession session) {
-    Integer uid = getUidFromSeesion(session);
+    Integer uid = getUidFromSession(session);
     userService.changePassword(uid, originPassword, newPassword);
     return JsonResponse.response(SUCCESS, "修改成功", null);
   }

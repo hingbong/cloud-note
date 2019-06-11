@@ -24,6 +24,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionController extends BaseController {
 
+  /**
+   * handle exception
+   *
+   * @param throwable service exception
+   * @return exception message
+   */
   @ExceptionHandler(ServiceException.class)
   public JsonResponse<Void> exceptionHandler(final Throwable throwable) {
     System.err.println(LocalDateTime.now() + " ==> " + throwable);

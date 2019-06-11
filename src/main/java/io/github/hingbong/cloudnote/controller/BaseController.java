@@ -21,7 +21,7 @@ public abstract class BaseController {
   static final int NOT_SUCCESS = 0;
   static final int SOME_THING_ERROR = 5001;
 
-  final Integer getUidFromSeesion(HttpSession session) {
+  final Integer getUidFromSession(HttpSession session) {
     return Integer.valueOf(session.getAttribute("uid").toString());
   }
 }

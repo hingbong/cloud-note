@@ -2,6 +2,11 @@ package io.github.hingbong.cloudnote.entity;
 
 import java.util.Objects;
 
+/**
+ * t_note table
+ *
+ * @author Hingbong
+ */
 public class Note {
 
   private Integer nid;

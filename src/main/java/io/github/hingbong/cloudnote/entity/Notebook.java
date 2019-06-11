@@ -3,6 +3,11 @@ package io.github.hingbong.cloudnote.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * t_notebook table
+ *
+ * @author Hingbong
+ */
 public class Notebook implements Serializable {
 
   private Integer nbId;

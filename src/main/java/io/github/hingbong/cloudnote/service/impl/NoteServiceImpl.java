@@ -3,7 +3,7 @@ package io.github.hingbong.cloudnote.service.impl;
 import io.github.hingbong.cloudnote.entity.Note;
 import io.github.hingbong.cloudnote.entity.Notebook;
 import io.github.hingbong.cloudnote.mapper.NoteMapper;
-import io.github.hingbong.cloudnote.service.NoteSerivce;
+import io.github.hingbong.cloudnote.service.NoteService;
 import io.github.hingbong.cloudnote.service.NotebookService;
 import io.github.hingbong.cloudnote.service.excption.InvalidNoteException;
 import io.github.hingbong.cloudnote.service.excption.NoteNotFoundException;
@@ -15,8 +15,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implement of NoteService
+ *
+ * @author Hingbong
+ */
 @Service
-public class NoteSerivceImpl implements NoteSerivce {
+public class NoteServiceImpl implements NoteService {
 
   private NoteMapper noteMapper;
   private NotebookService notebookService;
@@ -127,7 +132,7 @@ public class NoteSerivceImpl implements NoteSerivce {
   }
 
   @Autowired
-  public void setNotebookService(NotebookService notebookService) {
+  private void setNotebookService(NotebookService notebookService) {
     this.notebookService = notebookService;
   }
 

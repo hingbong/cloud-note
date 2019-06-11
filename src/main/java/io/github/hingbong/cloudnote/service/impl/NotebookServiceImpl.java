@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implement of NotebookService
+ *
+ * @author Hingbong
+ */
 @Service
 public class NotebookServiceImpl implements NotebookService {
 
@@ -25,7 +30,7 @@ public class NotebookServiceImpl implements NotebookService {
     checkNotebook(title);
     checkUser(uid);
 
-    chekTitle(title, uid);
+    checkNotebookTitle(title, uid);
 
     Notebook notebook = new Notebook(title, 0, uid);
     insert(notebook);
@@ -36,7 +41,7 @@ public class NotebookServiceImpl implements NotebookService {
     checkNotebook(title);
     checkUserAndNotebook(uid, nbId);
 
-    checkTitle(title, uid);
+    checkNotebookTitle(title, uid);
 
     update(nbId, title);
   }
@@ -75,7 +80,7 @@ public class NotebookServiceImpl implements NotebookService {
     }
   }
 
-  private void chekTitle(String title, Integer uid) {
+  private void checkNotebookTitle(String title, Integer uid) {
     Notebook byTitle = notebookMapper.findByTitle(title);
     if (byTitle != null && byTitle.getUid().equals(uid)) {
       throw new DuplicateTitleException("该标题已存在");
@@ -93,10 +98,6 @@ public class NotebookServiceImpl implements NotebookService {
     userService.findByUid(uid);
   }
 
-  private void checkTitle(String title, Integer uid) {
-    chekTitle(title, uid);
-  }
-
   private Notebook setIsDeletedToNull(Notebook notebook) {
     notebook.setIsDeleted(null);
     return notebook;
@@ -107,10 +108,10 @@ public class NotebookServiceImpl implements NotebookService {
       throw new FormatNotMatchException("记事本不能为空");
     }
     checkUser(uid);
-    checkNotebok(nbId);
+    checkNotebook(nbId);
   }
 
-  private void checkNotebok(Integer nbId) {
+  private void checkNotebook(Integer nbId) {
     Notebook byNbId = findByNbId(nbId);
     if (byNbId == null) {
       throw new NotebookNotFoundException("无此记事本");
