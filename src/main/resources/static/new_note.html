@@ -47,10 +47,9 @@
   </div>
 </article>
 <script>
-  fetch('/notebook').then(res = > res.json();
-  ).then(json = > json.data.forEach(ele = > {
+  fetch('/notebook').then(res => res.json()).then(json => json.data.forEach(ele => {
     const notebook = document.querySelector('#notebook');
-  notebook.innerHTML += `<option value="${ele.nbId}">${ele.title}</option>`;
+    notebook.innerHTML += `<option value="${ele.nbId}">${ele.title}</option>`;
   }))
 </script>
 <script src="js/main.js"></script>
