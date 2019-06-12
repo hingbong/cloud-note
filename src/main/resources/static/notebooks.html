@@ -41,14 +41,16 @@
     if (json.code === 1) {
       json.data.forEach(ele => {
         if (notebook) {
-          notebook.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="notes.html?nbId=${ele.nbId}">${ele.title}</a>
-          <button class="btn" onclick="deleteN('notebook',${ele.nbId})">删除</button>
-          <button class="btn" onclick="modify(${ele.nbId})">编辑</button>
+          notebook.innerHTML += `
+          <li class="d-lg-block p-2"><a href="notes.html?nbId=${ele.nbId}">${ele.title}</a>
+            <button class="btn-a btn" onclick="modify(${ele.nbId})">编辑</button>
+            <button class="btn-a btn delete" onclick="deleteN('notebook',${ele.nbId})">删除</button>
           </li>`;
+          document.querySelectorAll('.delete')[0].style.display = 'none';
         }
       })
     }
-  }).catch(() => location.replace('index.html'))
+  }).catch((e) => console.log(e));
 </script>
 </body>
 </html>

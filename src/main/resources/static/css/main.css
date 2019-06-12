@@ -28,6 +28,6 @@ article {
   height: 80vh;
 }
 
-#notebook_div {
-
+.btn-a {
+  float: right !important;
 }

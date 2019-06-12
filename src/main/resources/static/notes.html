@@ -38,14 +38,15 @@
     if (json.code === 1) {
       json.data.forEach(ele => {
         if (note) {
-          note.innerHTML += `<li class="d-lg-block col-2 p-2"><a href="note.html?nid=${ele.nid}">${ele.title}</a>
-          <button class="btn"  onclick="deleteN('note',${ele.nid})">删除</button>
-          <button class="btn"  onclick="modify_page(${ele.nid})">编辑</button>
+          note.innerHTML += `
+          <li class="d-lg-block p-2"><a href="note.html?nid=${ele.nid}">${ele.title}</a>
+            <button class="btn-a btn"  onclick="modify_page(${ele.nid})">编辑</button>
+            <button class="btn-a btn"  onclick="deleteN('note',${ele.nid})">删除</button>
           </li>`;
         }
       })
     }
-  })
+  }).catch((e) => console.log(e));
 </script>
 </body>
 </html>
