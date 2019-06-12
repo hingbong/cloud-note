@@ -17,6 +17,7 @@ public abstract class BaseController {
   static final int DUPLICATE_TITLE = 4005;
   static final int NOTEBOOK_NOT_FOUND = 4006;
   static final int INVALID_NOTE = 4007;
+  static final int DELETE_DEFAULT_NOTEBOOK = 4008;
 
   static final int NOT_SUCCESS = 0;
   static final int SOME_THING_ERROR = 5001;

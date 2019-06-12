@@ -46,10 +46,18 @@ public interface NotebookMapper {
   List<Notebook> findAllByUid(Integer uid);
 
   /**
+   * find default notebook of a user (order by notebook id, the first one)
+   *
+   * @param uid user id
+   * @return default notebook
+   */
+  Notebook findDefaultNotebook(Integer uid);
+
+  /**
    * update notebook(notebook title)
    *
    * @param title notebook new title
-   * @param nbId  notebook id
+   * @param nbId notebook id
    * @return rows affected
    */
   Integer updateNotebook(@Param("title") String title, @Param("nbId") Integer nbId);

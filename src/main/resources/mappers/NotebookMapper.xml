@@ -26,7 +26,15 @@
     SELECT nb_id nbId, title, is_deleted isDeleted, uid
     FROM t_notebook
     WHERE uid = #{uid}
-    ORDER BY nb_id DESC;
+    ORDER BY nb_id;
+  </select>
+
+  <select id="findDefaultNotebook" resultType="io.github.hingbong.cloudnote.entity.Notebook">
+    SELECT nb_id, title, is_deleted isDeleted, uid
+    FROM t_notebook
+    WHERE uid = #{uid}
+    ORDER BY nb_id
+    LIMIT 1
   </select>
 
   <update id="updateNotebook">

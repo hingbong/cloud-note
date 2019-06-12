@@ -35,4 +35,9 @@
     WHERE nid = #{nid}
   </update>
 
+  <update id="moveNoteToDefaultNotebook">
+    UPDATE t_note
+    SET nb_id = #{defaultNbId}
+    where nb_id = #{nowNbId}
+  </update>
 </mapper>

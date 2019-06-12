@@ -3,9 +3,6 @@ package io.github.hingbong.cloudnote.controller;
 import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.service.UserService;
 import io.github.hingbong.cloudnote.util.JsonResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,18 +39,13 @@ public class UserController extends BaseController {
    * login
    *
    * @param username username for login
-   * @param session  session for storing login status
+   * @param session session for storing login status
    * @return success json
    */
   @PostMapping("/session")
-  public JsonResponse<User> login(
-      String username, String password, HttpServletRequest request, HttpServletResponse response) {
+  public JsonResponse<User> login(String username, String password, HttpSession session) {
     User login = userService.login(username, password);
-    HttpSession session = request.getSession();
     session.setAttribute("uid", login.getUid());
-    Cookie cookie = new Cookie("JSESSIONID", session.getId());
-    cookie.setPath(request.getContextPath());
-    response.addCookie(cookie);
     return JsonResponse.response(SUCCESS, "登录成功", login);
   }
 

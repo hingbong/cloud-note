@@ -2,6 +2,7 @@ package io.github.hingbong.cloudnote.mapper;
 
 import io.github.hingbong.cloudnote.entity.Note;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -51,4 +52,14 @@ public interface NoteMapper {
    * @return rows affected
    */
   Integer updateNote(Note note);
+
+  /**
+   * when delete a notebook, move all notes to default notebook
+   *
+   * @param defaultNbId default notebook id
+   * @param nowNbId     now notebook id
+   * @return rows affected
+   */
+  Integer moveNoteToDefaultNotebook(
+      @Param("defaultNbId") Integer defaultNbId, @Param("nowNbId") Integer nowNbId);
 }

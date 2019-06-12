@@ -13,7 +13,7 @@ public interface NoteService {
   /**
    * add a new note
    *
-   * @param uid  user id
+   * @param uid user id
    * @param note new note
    */
   void addNote(Integer uid, Note note);
@@ -43,4 +43,6 @@ public interface NoteService {
    * @param note note which is updated
    */
   void modifyNote(Integer uid, Note note);
+
+  void moveToDefault(Integer defaultNbid, Integer nowNbid);
 }

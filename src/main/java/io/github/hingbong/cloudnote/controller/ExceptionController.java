@@ -1,5 +1,6 @@
 package io.github.hingbong.cloudnote.controller;
 
+import io.github.hingbong.cloudnote.service.excption.DeleteDefaultNotebookException;
 import io.github.hingbong.cloudnote.service.excption.DeleteException;
 import io.github.hingbong.cloudnote.service.excption.DuplicateTitleException;
 import io.github.hingbong.cloudnote.service.excption.DuplicateUsernameException;
@@ -49,6 +50,8 @@ public class ExceptionController extends BaseController {
       status = NOTEBOOK_NOT_FOUND;
     } else if (throwable instanceof InvalidNoteException) {
       status = INVALID_NOTE;
+    } else if (throwable instanceof DeleteDefaultNotebookException) {
+      status = DELETE_DEFAULT_NOTEBOOK;
     } else if (throwable instanceof InsertException
         || throwable instanceof UpdateException
         || throwable instanceof DeleteException) {

@@ -84,6 +84,18 @@ public class NoteServiceImpl implements NoteService {
     }
   }
 
+  @Override
+  public void moveToDefault(Integer defaultNbid, Integer nowNbid) {
+    moveNoteToDefaultNotebook(defaultNbid, nowNbid);
+  }
+
+  private void moveNoteToDefaultNotebook(Integer defaultNbid, Integer nowNbid) {
+    Integer moveNoteToDefaultNotebook = noteMapper.moveNoteToDefaultNotebook(defaultNbid, nowNbid);
+    if (moveNoteToDefaultNotebook < 1) {
+      throw new UpdateException("移动笔记错误");
+    }
+  }
+
   private Note getOneByNid(Integer uid, Integer nid) {
     if (nid == null) {
       throw new NoteNotFoundException("无此笔记");

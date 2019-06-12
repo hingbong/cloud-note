@@ -2,6 +2,7 @@ package io.github.hingbong.cloudnote.service.impl;
 
 import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.mapper.UserMapper;
+import io.github.hingbong.cloudnote.service.NotebookService;
 import io.github.hingbong.cloudnote.service.UserService;
 import io.github.hingbong.cloudnote.service.excption.DuplicateUsernameException;
 import io.github.hingbong.cloudnote.service.excption.FormatNotMatchException;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
   private UserMapper userMapper;
+  private NotebookService notebookService;
 
   @Override
   public void register(User user) {
@@ -43,6 +45,12 @@ public class UserServiceImpl implements UserService {
     user.setPassword(sha3Password);
 
     insertUser(user);
+
+    // generate key
+    Integer uid = user.getUid();
+    // add a default notebook when user register
+    String title = "默认笔记本";
+    notebookService.addNotebook(title, uid);
   }
 
   @Override
@@ -159,6 +167,11 @@ public class UserServiceImpl implements UserService {
       str = DigestUtils.sha3_256Hex(str);
     }
     return str;
+  }
+
+  @Autowired
+  private void setNotebookService(NotebookService notebookService) {
+    this.notebookService = notebookService;
   }
 
   @Autowired
