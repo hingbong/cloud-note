@@ -29,7 +29,7 @@ public class NotebookController extends BaseController {
   public JsonResponse<Void> addNotebook(String title, HttpSession session) {
     Integer uid = getUidFromSession(session);
     notebookService.addNotebook(title, uid);
-    return JsonResponse.response(SUCCESS, "添加成功", null);
+    return JsonResponse.success("添加成功");
   }
 
   @PutMapping("/{nbId}/{title}")
@@ -39,20 +39,20 @@ public class NotebookController extends BaseController {
       HttpSession session) {
     Integer uid = getUidFromSession(session);
     notebookService.modifyTitle(nbId, title, uid);
-    return JsonResponse.response(SUCCESS, "修改成功", null);
+    return JsonResponse.success("修改成功");
   }
 
   @GetMapping
   public JsonResponse<List<Notebook>> findAllByUid(HttpSession session) {
     Integer uid = getUidFromSession(session);
-    return JsonResponse.response(SUCCESS, "获取成功", notebookService.findAllByUid(uid));
+    return JsonResponse.success("获取成功", notebookService.findAllByUid(uid));
   }
 
   @DeleteMapping("/{nbId}")
   public JsonResponse<Void> delete(@PathVariable Integer nbId, HttpSession session) {
     Integer uid = getUidFromSession(session);
     notebookService.delete(uid, nbId);
-    return JsonResponse.response(SUCCESS, "删除成功", null);
+    return JsonResponse.success("删除成功");
   }
 
   @Autowired

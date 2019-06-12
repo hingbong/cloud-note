@@ -32,7 +32,7 @@ public class UserController extends BaseController {
   @PostMapping
   public JsonResponse<Void> register(User user) {
     userService.register(user);
-    return JsonResponse.response(SUCCESS, "注册成功", null);
+    return JsonResponse.success("注册成功");
   }
 
   /**
@@ -46,13 +46,13 @@ public class UserController extends BaseController {
   public JsonResponse<User> login(String username, String password, HttpSession session) {
     User login = userService.login(username, password);
     session.setAttribute("uid", login.getUid());
-    return JsonResponse.response(SUCCESS, "登录成功", login);
+    return JsonResponse.success("登录成功", login);
   }
 
   @DeleteMapping("/session")
   public JsonResponse<Void> logout(HttpSession session) {
     session.removeAttribute("uid");
-    return JsonResponse.response(SUCCESS, "注销成功", null);
+    return JsonResponse.success("注销成功");
   }
 
   @PutMapping("/password")
@@ -62,7 +62,7 @@ public class UserController extends BaseController {
       HttpSession session) {
     Integer uid = getUidFromSession(session);
     userService.changePassword(uid, originPassword, newPassword);
-    return JsonResponse.response(SUCCESS, "修改成功", null);
+    return JsonResponse.success("修改成功");
   }
 
   @Autowired

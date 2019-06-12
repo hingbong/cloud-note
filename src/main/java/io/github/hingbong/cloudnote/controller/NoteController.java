@@ -28,28 +28,28 @@ public class NoteController extends BaseController {
   public JsonResponse<Void> addNote(HttpSession session, Note note) {
     Integer uid = getUidFromSession(session);
     noteService.addNote(uid, note);
-    return JsonResponse.response(SUCCESS, "添加成功", null);
+    return JsonResponse.success("添加成功");
   }
 
   @GetMapping("/{nbId}")
   public JsonResponse<List<Note>> getNotesByNbId(HttpSession session, @PathVariable Integer nbId) {
     Integer uid = getUidFromSession(session);
     List<Note> notes = noteService.getNoteByNotebook(uid, nbId);
-    return JsonResponse.response(SUCCESS, null, notes);
+    return JsonResponse.success(notes);
   }
 
   @GetMapping("/note/{nid}")
   public JsonResponse<Note> getNoteByNid(HttpSession session, @PathVariable Integer nid) {
     Integer uid = getUidFromSession(session);
     Note note = noteService.getNoteByNid(uid, nid);
-    return JsonResponse.response(SUCCESS, null, note);
+    return JsonResponse.success(note);
   }
 
   @PutMapping
   public JsonResponse<Void> modifyNote(HttpSession session, Note note) {
     Integer uid = getUidFromSession(session);
     noteService.modifyNote(uid, note);
-    return JsonResponse.response(SUCCESS, null, null);
+    return JsonResponse.success();
   }
 
   @Autowired

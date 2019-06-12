@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
  */
 public abstract class BaseController {
 
-  static final int SUCCESS = 1;
   static final int FORMAT_NOT_MATCH = 4001;
   static final int DUPLICATE_USERNAME = 4002;
   static final int USER_NOT_FOUND = 4003;

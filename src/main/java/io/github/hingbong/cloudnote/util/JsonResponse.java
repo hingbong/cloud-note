@@ -11,9 +11,25 @@ import java.util.Objects;
  */
 public class JsonResponse<T> implements Serializable {
 
+  private static final int SUCCESS = 1;
+
   private int code;
   private String msg;
   private T data;
+
+  private JsonResponse(int code) {
+    this.code = code;
+  }
+
+  private JsonResponse(int code, String msg) {
+    this.code = code;
+    this.msg = msg;
+  }
+
+  private JsonResponse(int code, T data) {
+    this.code = code;
+    this.data = data;
+  }
 
   private JsonResponse(int code, String msg, T data) {
     this.code = code;
@@ -22,16 +38,35 @@ public class JsonResponse<T> implements Serializable {
   }
 
   /**
-   * new a json response entity
+   * new a successful json response entity
    *
-   * @param code stand by the operation code
-   * @param msg  success or failed's reasons
-   * @param data when need data, send data
-   * @param <T>  data's type
    * @return the whole entity
    */
-  public static <T> JsonResponse<T> response(int code, String msg, T data) {
-    return new JsonResponse<>(code, msg, data);
+  public static <T> JsonResponse<T> success() {
+    return new JsonResponse<>(SUCCESS);
+  }
+
+  public static <T> JsonResponse<T> success(String msg) {
+    return new JsonResponse<>(SUCCESS, msg);
+  }
+
+  public static <T> JsonResponse<T> success(T data) {
+    return new JsonResponse<>(SUCCESS, data);
+  }
+
+  public static <T> JsonResponse<T> success(String msg, T data) {
+    return new JsonResponse<>(SUCCESS, msg, data);
+  }
+
+  /**
+   * new a exception json response entity
+   *
+   * @param code exception code
+   * @param msg  exception message
+   * @return the whole entity
+   */
+  public static JsonResponse exception(int code, String msg) {
+    return new JsonResponse<Void>(code, msg);
   }
 
   public int getCode() {

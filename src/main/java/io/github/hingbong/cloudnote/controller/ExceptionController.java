@@ -32,7 +32,7 @@ public class ExceptionController extends BaseController {
    * @return exception message
    */
   @ExceptionHandler(ServiceException.class)
-  public JsonResponse<Void> exceptionHandler(final Throwable throwable) {
+  public JsonResponse exceptionHandler(final Throwable throwable) {
     System.err.println(LocalDateTime.now() + " ==> " + throwable);
     String msg;
     int status;
@@ -60,6 +60,6 @@ public class ExceptionController extends BaseController {
       status = NOT_SUCCESS;
     }
     msg = throwable.getMessage();
-    return JsonResponse.response(status, msg, null);
+    return JsonResponse.exception(status, msg);
   }
 }
