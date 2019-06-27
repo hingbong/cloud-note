@@ -52,18 +52,25 @@
     }
   });
 
+  const sharedStat = [{
+    url: '/shared', action: '设为共享'
+  }, {
+    url: '/unshared', action: '设为私有'
+  }];
+
   fetch(`/note/${param.nbId}`).then(res => res.json()).then(json => {
     const note = document.querySelector('#note');
     if (json.code === 1) {
       json.data.forEach(ele => {
         if (note) {
           note.innerHTML += `
-          <li class="d-lg-block p-2"><a href="note.html?nid=${ele.nid}">${ele.title}</a>
+          <li class="d-lg-block p-2"><a href="/note.html?nid=${ele.nid}">${ele.title}</a>
+            <button class="btn-a btn"  onclick="updateNoteShared('${sharedStat[ele.isShared].url}',${ele.nid},'put')">${sharedStat[ele.isShared].action}</button>
             <button class="btn-a btn"  onclick="modify_page(${ele.nid})">编辑</button>
             <button class="btn-a btn"  onclick="deleteN('note', ${ele.nid})">删除</button>
           </li>`;
         }
-      })
+      });
     }
   }).catch((e) => console.log(e));
 </script>

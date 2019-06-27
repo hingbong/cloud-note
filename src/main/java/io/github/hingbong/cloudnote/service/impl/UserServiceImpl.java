@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * implement of UserService
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
   private NotebookService notebookService;
 
   @Override
+  @Transactional
   public void register(User user) {
     // check the user's information
     checkUser(user);

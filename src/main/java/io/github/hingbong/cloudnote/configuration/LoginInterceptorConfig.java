@@ -30,7 +30,10 @@ public class LoginInterceptorConfig implements WebMvcConfigurer {
             "/register.html",
             "/index.html",
             "/user",
-            "/user/session");
+            "/user/session",
+            "/shared_note.html",
+            "/note/notes/shared/all",
+            "/note/shared/note/one/**");
   }
 
   @Autowired

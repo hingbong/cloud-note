@@ -70,7 +70,7 @@ public class NotebookController extends BaseController {
   }
 
   @Autowired
-  public void setNotebookService(NotebookService notebookService) {
+  private void setNotebookService(NotebookService notebookService) {
     this.notebookService = notebookService;
   }
 }

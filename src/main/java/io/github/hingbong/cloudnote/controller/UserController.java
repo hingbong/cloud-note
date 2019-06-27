@@ -67,7 +67,7 @@ public class UserController extends BaseController {
   }
 
   @Autowired
-  public void setUserService(UserService userService) {
+  private void setUserService(UserService userService) {
     this.userService = userService;
   }
 }

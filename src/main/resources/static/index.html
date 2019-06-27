@@ -17,5 +17,32 @@
     </nav>
   </div>
 </header>
+<article>
+  <div id="notebook_div" class="mx-auto col-sm-8 col-md-6 hide-sm container">
+    <div style="position:relative">
+      <h1 id="title" class="h000-mktg text-white lh-condensed-ultra mb-3">已共享笔记</h1>
+    </div>
+    <div class="rounded-1 text-gray bg-gray-light py-4 px-4 px-md-3 px-lg-4">
+      <ul id="shared_notes" class="list-style-none">
+
+      </ul>
+    </div>
+  </div>
+</article>
+<script>
+  fetch('/note/notes/shared/all').then(res => res.json()).then(json => {
+    if (json.code === 1) {
+      const data = json.data;
+      const note = document.querySelector('#shared_notes');
+      data.forEach(ele => {
+        if (note) {
+          note.innerHTML += `
+          <li class="d-lg-block p-2"><a href="/shared_note.html?nid=${ele.nid}">${ele.title}</a>
+          </li>`;
+        }
+      });
+    }
+  })
+</script>
 </body>
 </html>

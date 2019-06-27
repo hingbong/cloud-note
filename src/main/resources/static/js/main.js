@@ -66,6 +66,16 @@ const modifyNB = (modifier, nbId, originVal) => {
       () => location.replace('login.html'))
 };
 
+const updateNoteShared = (url, nid) => {
+  fetch(`/note/${nid}${url}`, {
+    method: 'put'
+  }).then(res => res.json()).then(json => {
+    if (json.code === 1) {
+      location.reload();
+    }
+  });
+};
+
 const getQueryStringParameters = () => {
   let query = window.location.search.substring(1);
   return (/^[?#]/.test(query) ? query.slice(1) : query)

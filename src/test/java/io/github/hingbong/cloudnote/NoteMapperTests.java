@@ -2,6 +2,7 @@ package io.github.hingbong.cloudnote;
 
 import io.github.hingbong.cloudnote.entity.Note;
 import io.github.hingbong.cloudnote.mapper.NoteMapper;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ class NoteMapperTests {
 
   @Test
   void all() {
-    List<Note> allTitle = noteMapper.findAllInANotebook(1);
+    List<Note> allTitle = noteMapper.findAllInOneNotebook(1);
     System.out.println(allTitle);
   }
 
@@ -38,7 +39,7 @@ class NoteMapperTests {
 
   @Test
   void delete() {
-    Integer deleted = noteMapper.markIsDeleted(1);
+    Integer deleted = noteMapper.markIsDeleted(1, "root", LocalDateTime.now());
     System.err.println(deleted);
   }
 

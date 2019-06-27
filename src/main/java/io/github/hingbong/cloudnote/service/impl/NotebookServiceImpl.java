@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implement of NotebookService
@@ -85,11 +86,9 @@ public class NotebookServiceImpl implements NotebookService {
     return notebook;
   }
 
-  private Notebook getNotebook(Integer nbId) {
-    return notebookMapper.findByNbId(nbId);
-  }
 
   @Override
+  @Transactional
   public void delete(Integer uid, Integer nbId) {
     checkUserAndNotebook(uid, nbId);
     Integer defaultNbId = checkDeleteDefault(nbId);
@@ -99,6 +98,9 @@ public class NotebookServiceImpl implements NotebookService {
     noteService.moveToDefault(defaultNbId, nbId);
   }
 
+  private Notebook getNotebook(Integer nbId) {
+    return notebookMapper.findByNbId(nbId);
+  }
   private Integer checkDeleteDefault(Integer nbId) {
     Notebook defaultNotebook = notebookMapper.findDefaultNotebook(nbId);
     if (nbId.equals(defaultNotebook.getNbId())) {

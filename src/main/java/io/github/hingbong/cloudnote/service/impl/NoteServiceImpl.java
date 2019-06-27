@@ -5,12 +5,15 @@ import io.github.hingbong.cloudnote.entity.Notebook;
 import io.github.hingbong.cloudnote.mapper.NoteMapper;
 import io.github.hingbong.cloudnote.service.NoteService;
 import io.github.hingbong.cloudnote.service.NotebookService;
+import io.github.hingbong.cloudnote.service.excption.AccessDeniedException;
+import io.github.hingbong.cloudnote.service.excption.InsertException;
 import io.github.hingbong.cloudnote.service.excption.InvalidNoteException;
 import io.github.hingbong.cloudnote.service.excption.NoteNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.NotebookNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +59,7 @@ public class NoteServiceImpl implements NoteService {
     if (!notebook.getUid().equals(uid)) {
       throw new UserNotFoundException("请选择正确的记事本");
     }
-    List<Note> notes = noteMapper.findAllInANotebook(nbId);
+    List<Note> notes = noteMapper.findAllInOneNotebook(nbId);
     return notes.stream()
         .filter(note -> note.getIsDeleted().equals(0))
         .map(this::setIsDeletedToNull)
@@ -64,12 +67,29 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public Note getNoteByNid(Integer uid, Integer nid) {
-    return getOneByNid(uid, nid);
+  public List<Note> getAllSharedNotes() {
+    return noteMapper.findAllSharedNotes().parallelStream()
+        .sorted(Comparator.comparing(Note::getModifiedTime)).map(this::setIsDeletedToNull).collect(
+            Collectors.toList());
   }
 
   @Override
-  public void modifyNote(Integer uid, Note note) {
+  public Note getNoteByNid(Integer uid, Integer nid) {
+    Note note = getOneByNid(nid);
+    Notebook notebook = notebookService.findByNbId(note.getNbId());
+    if (!uid.equals(notebook.getUid())) {
+      throw new UserNotFoundException("请选择正确的笔记");
+    }
+    return note;
+  }
+
+  @Override
+  public Note getNoteByNid(Integer nid) {
+    return getOneByNid(nid);
+  }
+
+  @Override
+  public void modifyNote(Integer uid, String username, Note note) {
     if (note.getNbId() != null) {
       Notebook notebook = notebookService.findByNbId(note.getNbId());
       if (!uid.equals(notebook.getUid())) {
@@ -80,16 +100,48 @@ public class NoteServiceImpl implements NoteService {
       throw new NoteNotFoundException("错误的笔记");
     }
     Note note1 = noteMapper.getOneByNid(note.getNid());
-    if (note1 == null) {
+    if (note1 == null || note1.getIsDeleted().equals(1)) {
       throw new NoteNotFoundException("错误的笔记");
     }
-    note.setIsShared(note1.getIsShared());
-    note.setIsDeleted(0);
+    note.setIsShared(note1.getIsShared()).setIsDeleted(0).setModifiedTime(LocalDateTime.now())
+        .setModifiedUser(username);
     Integer updateNote = noteMapper.updateNote(note);
     if (!updateNote.equals(1)) {
       throw new UpdateException("未知错误");
     }
   }
+
+  @Override
+  public void deleteNote(Integer uid, String username, Integer nid) {
+    updateCheck(uid, nid);
+
+    Integer markIsDeleted = noteMapper.markIsDeleted(nid, username, LocalDateTime.now());
+    if (!markIsDeleted.equals(1)) {
+      throw new UpdateException("未知错误");
+    }
+  }
+
+  @Override
+  public void setShared(Integer uid, String username, Integer nid) {
+    updateCheck(uid, nid);
+
+    Integer markIsShared = noteMapper.markIsShared(nid, username, LocalDateTime.now());
+    if (!markIsShared.equals(1)) {
+      throw new InsertException("未知异常");
+    }
+  }
+
+
+  @Override
+  public void unsetShared(Integer uid, String username, Integer nid) {
+    updateCheck(uid, nid);
+
+    Integer cancelShared = noteMapper.cancelShared(nid, username, LocalDateTime.now());
+    if (!cancelShared.equals(1)) {
+      throw new InsertException("未知异常");
+    }
+  }
+
 
   @Override
   public void moveToDefault(Integer defaultNbid, Integer nowNbid) {
@@ -103,17 +155,29 @@ public class NoteServiceImpl implements NoteService {
     }
   }
 
-  private Note getOneByNid(Integer uid, Integer nid) {
+  private void updateCheck(Integer uid, Integer nid) {
+    Note note = noteMapper.getOneByNid(nid);
+    if (note == null) {
+      throw new NoteNotFoundException("无此笔记");
+    }
+
+    Notebook notebook = notebookService.findByNbId(note.getNbId());
+    if (notebook == null) {
+      throw new NotebookNotFoundException("无此记事本");
+    }
+
+    if (!notebook.getUid().equals(uid)) {
+      throw new AccessDeniedException("用户异常");
+    }
+  }
+
+  private Note getOneByNid(Integer nid) {
     if (nid == null) {
       throw new NoteNotFoundException("无此笔记");
     }
     Note note = noteMapper.getOneByNid(nid);
     if (note == null) {
       throw new NoteNotFoundException("无此笔记");
-    }
-    Notebook notebook = notebookService.findByNbId(note.getNbId());
-    if (!uid.equals(notebook.getUid())) {
-      throw new UserNotFoundException("请选择正确的笔记");
     }
     return setIsDeletedToNull(note);
   }

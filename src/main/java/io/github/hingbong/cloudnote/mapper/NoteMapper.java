@@ -1,6 +1,7 @@
 package io.github.hingbong.cloudnote.mapper;
 
 import io.github.hingbong.cloudnote.entity.Note;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,9 @@ public interface NoteMapper {
    * @param nbId notebook id
    * @return all notes in a notebook
    */
-  List<Note> findAllInANotebook(Integer nbId);
+  List<Note> findAllInOneNotebook(Integer nbId);
+
+  List<Note> findAllSharedNotes();
 
   /**
    * find a note by note id
@@ -43,7 +46,14 @@ public interface NoteMapper {
    * @param nid note id
    * @return rows affected
    */
-  Integer markIsDeleted(Integer nid);
+  Integer markIsDeleted(@Param("nid") Integer nid, @Param("modifiedUser") String modifiedUser,
+      @Param("modifiedTime") LocalDateTime modifiedTime);
+
+  Integer markIsShared(@Param("nid") Integer nid, @Param("modifiedUser") String modifiedUser,
+      @Param("modifiedTime") LocalDateTime modifiedTime);
+
+  Integer cancelShared(@Param("nid") Integer nid, @Param("modifiedUser") String modifiedUser,
+      @Param("modifiedTime") LocalDateTime modifiedTime);
 
   /**
    * update a note

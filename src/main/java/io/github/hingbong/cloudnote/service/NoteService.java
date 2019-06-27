@@ -27,6 +27,8 @@ public interface NoteService {
    */
   List<Note> getNoteByNotebook(Integer uid, Integer nbId);
 
+  List<Note> getAllSharedNotes();
+
   /**
    * get a note by note id
    *
@@ -37,12 +39,26 @@ public interface NoteService {
   Note getNoteByNid(Integer uid, Integer nid);
 
   /**
+   * get a note by note id
+   *
+   * @param nid note id
+   * @return note
+   */
+  Note getNoteByNid(Integer nid);
+
+  /**
    * update note
    *
    * @param uid user id
    * @param note note which is updated
    */
-  void modifyNote(Integer uid, Note note);
+  void modifyNote(Integer uid, String username, Note note);
+
+  void deleteNote(Integer uid, String username, Integer nid);
+
+  void setShared(Integer uid, String username, Integer nid);
+
+  void unsetShared(Integer uid, String username, Integer nid);
 
   void moveToDefault(Integer defaultNbid, Integer nowNbid);
 }

@@ -13,7 +13,7 @@
   </insert>
 
 
-  <select id="findAllInANotebook" resultType="io.github.hingbong.cloudnote.entity.Note">
+  <select id="findAllInOneNotebook" resultType="io.github.hingbong.cloudnote.entity.Note">
     SELECT nid,
            title,
            content,
@@ -26,6 +26,21 @@
            modified_time modifiedTime
     FROM t_note
     WHERE nb_id = #{nbId}
+  </select>
+
+  <select id="findAllSharedNotes" resultType="io.github.hingbong.cloudnote.entity.Note">
+    SELECT nid,
+           title,
+           content,
+           is_shared     isShared,
+           is_deleted    isDeleted,
+           nb_id         nbId,
+           author,
+           create_time   createTime,
+           modified_user modifiedUser,
+           modified_time modifiedTime
+    FROM t_note
+    WHERE is_shared = 1
   </select>
 
   <select id="getOneByNid" resultType="io.github.hingbong.cloudnote.entity.Note">
@@ -45,7 +60,25 @@
 
   <update id="markIsDeleted">
     UPDATE t_note
-    SET is_deleted = 1
+    SET is_deleted    = 1,
+        modified_user = #{modifiedUser},
+        modified_time=#{modifiedTime}
+    WHERE nid = #{nid}
+  </update>
+
+  <update id="markIsShared">
+    UPDATE t_note
+    SET is_shared     = 1,
+        modified_user = #{modifiedUser},
+        modified_time=#{modifiedTime}
+    WHERE nid = #{nid}
+  </update>
+
+  <update id="cancelShared">
+    UPDATE t_note
+    SET is_shared     = 0,
+        modified_user = #{modifiedUser},
+        modified_time=#{modifiedTime}
     WHERE nid = #{nid}
   </update>
 
