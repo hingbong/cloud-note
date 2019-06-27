@@ -46,6 +46,7 @@ public class UserController extends BaseController {
   public JsonResponse<User> login(String username, String password, HttpSession session) {
     User login = userService.login(username, password);
     session.setAttribute("uid", login.getUid());
+    session.setAttribute("username", login.getUsername());
     return JsonResponse.success("登录成功", login);
   }
 

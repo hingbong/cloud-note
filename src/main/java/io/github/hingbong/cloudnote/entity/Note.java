@@ -1,5 +1,6 @@
 package io.github.hingbong.cloudnote.entity;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -15,53 +16,99 @@ public class Note {
   private Integer isShared;
   private Integer isDeleted;
   private Integer nbId;
+  private String author;
+  private LocalDateTime createTime;
+  private String modifiedUser;
+  private LocalDateTime modifiedTime;
 
   public Integer getNid() {
     return nid;
   }
 
-  public void setNid(Integer nid) {
+  public Note setNid(Integer nid) {
     this.nid = nid;
+    return this;
   }
 
   public String getTitle() {
     return title;
   }
 
-  public void setTitle(String title) {
+  public Note setTitle(String title) {
     this.title = title;
+    return this;
   }
 
   public String getContent() {
     return content;
   }
 
-  public void setContent(String content) {
+  public Note setContent(String content) {
     this.content = content;
+    return this;
   }
 
   public Integer getIsShared() {
     return isShared;
   }
 
-  public void setIsShared(Integer isShared) {
+  public Note setIsShared(Integer isShared) {
     this.isShared = isShared;
+    return this;
   }
 
   public Integer getIsDeleted() {
     return isDeleted;
   }
 
-  public void setIsDeleted(Integer isDeleted) {
+  public Note setIsDeleted(Integer isDeleted) {
     this.isDeleted = isDeleted;
+    return this;
   }
 
   public Integer getNbId() {
     return nbId;
   }
 
-  public void setNbId(Integer nbId) {
+  public Note setNbId(Integer nbId) {
     this.nbId = nbId;
+    return this;
+  }
+
+  public String getAuthor() {
+    return author;
+  }
+
+  public Note setAuthor(String author) {
+    this.author = author;
+    return this;
+  }
+
+  public LocalDateTime getCreateTime() {
+    return createTime;
+  }
+
+  public Note setCreateTime(LocalDateTime createTime) {
+    this.createTime = createTime;
+    return this;
+  }
+
+  public String getModifiedUser() {
+    return modifiedUser;
+  }
+
+  public Note setModifiedUser(String modifiedUser) {
+    this.modifiedUser = modifiedUser;
+    return this;
+  }
+
+  public LocalDateTime getModifiedTime() {
+    return modifiedTime;
+  }
+
+  public Note setModifiedTime(LocalDateTime modifiedTime) {
+    this.modifiedTime = modifiedTime;
+    return this;
   }
 
   @Override
@@ -83,14 +130,31 @@ public class Note {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("Note{");
-    sb.append("nid=").append(nid);
-    sb.append(", title='").append(title).append('\'');
-    sb.append(", content='").append(content).append('\'');
-    sb.append(", isShared=").append(isShared);
-    sb.append(", isDeleted=").append(isDeleted);
-    sb.append(", nbId=").append(nbId);
-    sb.append('}');
-    return sb.toString();
+    return "Note{"
+        + "nid="
+        + nid
+        + ", title='"
+        + title
+        + '\''
+        + ", content='"
+        + content
+        + '\''
+        + ", isShared="
+        + isShared
+        + ", isDeleted="
+        + isDeleted
+        + ", nbId="
+        + nbId
+        + ", author='"
+        + author
+        + '\''
+        + ", createTime="
+        + createTime
+        + ", modifiedUser='"
+        + modifiedUser
+        + '\''
+        + ", modifiedTime="
+        + modifiedTime
+        + '}';
   }
 }

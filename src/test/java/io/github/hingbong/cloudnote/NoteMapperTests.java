@@ -26,7 +26,7 @@ class NoteMapperTests {
 
   @Test
   void all() {
-    List<Note> allTitle = noteMapper.findAll(1);
+    List<Note> allTitle = noteMapper.findAllInANotebook(1);
     System.out.println(allTitle);
   }
 

@@ -27,7 +27,7 @@ public interface NoteMapper {
    * @param nbId notebook id
    * @return all notes in a notebook
    */
-  List<Note> findAll(Integer nbId);
+  List<Note> findAllInANotebook(Integer nbId);
 
   /**
    * find a note by note id

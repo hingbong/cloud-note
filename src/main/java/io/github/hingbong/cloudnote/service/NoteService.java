@@ -16,7 +16,7 @@ public interface NoteService {
    * @param uid user id
    * @param note new note
    */
-  void addNote(Integer uid, Note note);
+  void addNote(Integer uid, String username, Note note);
 
   /**
    * get notes of a notebook

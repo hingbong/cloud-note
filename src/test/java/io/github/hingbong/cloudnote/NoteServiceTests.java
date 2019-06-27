@@ -1,6 +1,5 @@
 package io.github.hingbong.cloudnote;
 
-
 import io.github.hingbong.cloudnote.entity.Note;
 import io.github.hingbong.cloudnote.service.NoteService;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ class NoteServiceTests {
     note.setContent("正文１");
     note.setIsShared(0);
     note.setNbId(1);
-    serivce.addNote(1, note);
+    serivce.addNote(1, "root", note);
   }
 
   @Autowired

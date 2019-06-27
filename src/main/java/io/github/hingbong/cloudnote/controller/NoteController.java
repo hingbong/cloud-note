@@ -27,7 +27,8 @@ public class NoteController extends BaseController {
   @PostMapping
   public JsonResponse<Void> addNote(HttpSession session, Note note) {
     Integer uid = getUidFromSession(session);
-    noteService.addNote(uid, note);
+    String username = getUsernameFromSession(session);
+    noteService.addNote(uid, username, note);
     return JsonResponse.success("添加成功");
   }
 

@@ -24,4 +24,8 @@ public abstract class BaseController {
   final Integer getUidFromSession(HttpSession session) {
     return Integer.valueOf(session.getAttribute("uid").toString());
   }
+
+  final String getUsernameFromSession(HttpSession session) {
+    return session.getAttribute("username").toString();
+  }
 }

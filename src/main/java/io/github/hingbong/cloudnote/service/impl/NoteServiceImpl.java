@@ -10,6 +10,7 @@ import io.github.hingbong.cloudnote.service.excption.NoteNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.NotebookNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,18 @@ public class NoteServiceImpl implements NoteService {
   private NotebookService notebookService;
 
   @Override
-  public void addNote(Integer uid, Note note) {
+  public void addNote(Integer uid, String username, Note note) {
     checkNote(note);
     Notebook notebook = notebookService.findByNbId(note.getNbId());
     checkNotebook(uid, note, notebook);
-    note.setIsShared(0);
-    note.setIsDeleted(0);
+
+    LocalDateTime now = LocalDateTime.now();
+    note.setIsShared(0)
+        .setIsDeleted(0)
+        .setAuthor(username)
+        .setCreateTime(now)
+        .setModifiedUser(username)
+        .setModifiedTime(now);
 
     noteMapper.insert(note);
   }
@@ -49,7 +56,7 @@ public class NoteServiceImpl implements NoteService {
     if (!notebook.getUid().equals(uid)) {
       throw new UserNotFoundException("请选择正确的记事本");
     }
-    List<Note> notes = noteMapper.findAll(nbId);
+    List<Note> notes = noteMapper.findAllInANotebook(nbId);
     return notes.stream()
         .filter(note -> note.getIsDeleted().equals(0))
         .map(this::setIsDeletedToNull)

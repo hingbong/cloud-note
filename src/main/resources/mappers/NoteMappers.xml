@@ -6,18 +6,39 @@
 <mapper namespace="io.github.hingbong.cloudnote.mapper.NoteMapper">
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="nid">
-    INSERT INTO t_note (title, content, is_shared, is_deleted, nb_id)
-    VALUES (#{title}, #{content}, #{isShared}, #{isDeleted}, #{nbId})
+    INSERT INTO t_note (title, content, is_shared, is_deleted, nb_id, author, create_time,
+                        modified_user, modified_time)
+    VALUES (#{title}, #{content}, #{isShared}, #{isDeleted}, #{nbId}, #{author}, #{createTime},
+            #{modifiedUser}, #{modifiedTime})
   </insert>
 
 
-  <select id="findAll" resultType="io.github.hingbong.cloudnote.entity.Note">
-    SELECT nid, title, content, is_shared isShared, is_deleted isDeleted, nb_id nbId
+  <select id="findAllInANotebook" resultType="io.github.hingbong.cloudnote.entity.Note">
+    SELECT nid,
+           title,
+           content,
+           is_shared     isShared,
+           is_deleted    isDeleted,
+           nb_id         nbId,
+           author,
+           create_time   createTime,
+           modified_user modifiedUser,
+           modified_time modifiedTime
     FROM t_note
+    WHERE nb_id = #{nbId}
   </select>
 
   <select id="getOneByNid" resultType="io.github.hingbong.cloudnote.entity.Note">
-    SELECT nid, title, content, is_shared isShared, is_deleted isDeleted, nb_id nbId
+    SELECT nid,
+           title,
+           content,
+           is_shared     isShared,
+           is_deleted    isDeleted,
+           nb_id         nbId,
+           author,
+           create_time   createTime,
+           modified_user modifiedUser,
+           modified_time modifiedTime
     FROM t_note
     WHERE nid = #{nid}
   </select>
