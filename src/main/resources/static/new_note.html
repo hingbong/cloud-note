@@ -19,22 +19,12 @@
   <div id="notebook_div" class="mx-auto col-sm-8 col-md-6 hide-sm container">
     <h1 class="h000-mktg text-white lh-condensed-ultra mb-3">添加笔记</h1>
     <div class="rounded-1 text-gray bg-gray-light py-4 px-4 px-md-3 px-lg-4">
-      <form action="/note" method="post"
-            onsubmit="send_form(this,'post','notes.html');return false">
+      <form id="add_note_form" action="/note" method="post">
         <dl class="form-group">
           <dt><label for="title">标题</label></dt>
           <dd><input class="form-control" type="text" id="title" name="title"></dd>
         </dl>
-
-        <dl class="form-group">
-          <dt><label for="notebook">选择记事本</label></dt>
-          <dd>
-            <select class="form-select" id="notebook" name="nbId">
-              <option value="0">Choose an option</option>
-            </select>
-          </dd>
-        </dl>
-
+        <input type="text" id="nbId" name="nbId" hidden aria-label="nbId">
         <dl class="form-group">
           <dt><label for="content">内容</label></dt>
           <dd>
@@ -46,12 +36,16 @@
     </div>
   </div>
 </article>
-<script>
-  fetch('/notebook').then(res => res.json()).then(json => json.data.forEach(ele => {
-    const notebook = document.querySelector('#notebook');
-    notebook.innerHTML += `<option value="${ele.nbId}">${ele.title}</option>`;
-  }))
-</script>
 <script src="js/main.js"></script>
+<script>
+  const param = getQueryStringParameters();
+
+  document.querySelector('#nbId').value = param.nbId;
+
+  document.querySelector('#add_note_form').onsubmit = function () {
+    send_form(this, 'post', `notes.html?nbId=${param.nbId}`);
+    return false;
+  }
+</script>
 </body>
 </html>

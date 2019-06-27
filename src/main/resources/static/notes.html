@@ -19,7 +19,7 @@
   <div id="notebook_div" class="mx-auto col-sm-8 col-md-6 hide-sm container">
     <h1 class="h000-mktg text-white lh-condensed-ultra mb-3">我的笔记</h1>
     <div class="rounded-1 text-gray bg-gray-light py-4 px-4 px-md-3 px-lg-4">
-      <a href="new_note.html">添加笔记</a>
+      <a onclick="newNote()">添加笔记</a>
       <ul id="note" class="list-style-none">
 
       </ul>
@@ -29,8 +29,12 @@
 <script src="js/main.js"></script>
 <script>
   const param = getQueryStringParameters();
-  const modify_page = (e) =>
+
+  const modify_page = e =>
       location.href = `modify_note.html?nid=${e}`;
+
+  const newNote = () => location.href = `new_note.html?nbId=${param.nbId}`;
+
   fetch(`/note/${param.nbId}`, {
     method: 'get'
   }).then(res => res.json()).then(json => {
