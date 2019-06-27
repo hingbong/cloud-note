@@ -60,7 +60,10 @@ public interface NotebookMapper {
    * @param nbId notebook id
    * @return rows affected
    */
-  Integer updateNotebook(@Param("title") String title, @Param("nbId") Integer nbId);
+  Integer updateNotebookTitle(@Param("title") String title, @Param("nbId") Integer nbId);
+
+  Integer updateNotebookDescription(@Param("description") String description,
+      @Param("nbId") Integer nbId);
 
   /**
    * mark a notebook as deleted(fake delete)

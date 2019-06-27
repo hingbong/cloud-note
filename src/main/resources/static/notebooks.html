@@ -24,8 +24,9 @@
       </ul>
       <form action="/notebook" method="post"
             onsubmit="send_form(this,'post','notebooks.html');return false;">
-        <input class="form-control" name="title" placeholder="添加记事本"
-               style="max-width: 200px" aria-label="">
+        <input class="form-control add-notebook" name="title" placeholder="添加记事本" aria-label="">
+        <textarea class="form-control add-notebook" name="description" placeholder="记事本描述"
+                  aria-label="description"></textarea>
         <input type="submit" class="btn" value="添加">
       </form>
     </div>
@@ -43,7 +44,7 @@
         if (notebook) {
           notebook.innerHTML += `
           <li class="d-lg-block p-2"><a href="notes.html?nbId=${ele.nbId}">${ele.title}</a>
-            <button class="btn-a btn" onclick="modify(${ele.nbId})">编辑</button>
+            <button class="btn-a btn" onclick="modifyNB('title',${ele.nbId}, '${ele.title}')">修改标题</button>
             <button class="btn-a btn delete" onclick="deleteN('notebook',${ele.nbId})">删除</button>
           </li>`;
           document.querySelectorAll('.delete')[0].style.display = 'none';

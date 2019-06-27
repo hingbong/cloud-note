@@ -17,7 +17,14 @@
 </header>
 <article>
   <div id="notebook_div" class="mx-auto col-sm-8 col-md-6 hide-sm container">
-    <h1 class="h000-mktg text-white lh-condensed-ultra mb-3">我的笔记</h1>
+    <div style="position:relative">
+      <h1 id="title" class="h000-mktg text-white lh-condensed-ultra mb-3">我的笔记</h1>
+      <div id="description" class="text-white lh-condensed-ultra mb-3">
+      </div>
+      <button id="modify-description" class="btn btn-sm inline"
+              style="position:absolute;right: 5px;bottom: -7px;">修改描述
+      </button>
+    </div>
     <div class="rounded-1 text-gray bg-gray-light py-4 px-4 px-md-3 px-lg-4">
       <a onclick="newNote()">添加笔记</a>
       <ul id="note" class="list-style-none">
@@ -30,14 +37,22 @@
 <script>
   const param = getQueryStringParameters();
 
-  const modify_page = e =>
-      location.href = `modify_note.html?nid=${e}`;
+  const modify_page = e => location.href = `modify_note.html?nid=${e}`;
 
   const newNote = () => location.href = `new_note.html?nbId=${param.nbId}`;
 
-  fetch(`/note/${param.nbId}`, {
-    method: 'get'
-  }).then(res => res.json()).then(json => {
+  fetch(`/notebook/${param.nbId}`).then(res => res.json()).then(json => {
+    if (json.code === 1) {
+      const data = json.data;
+      document.title = data.title;
+      document.querySelector('#title').innerHTML = data.title;
+      document.querySelector('#description').innerHTML = data.description;
+      document.querySelector('#modify-description').onclick = () => modifyNB('description',
+          data.nbId, data.description);
+    }
+  });
+
+  fetch(`/note/${param.nbId}`).then(res => res.json()).then(json => {
     const note = document.querySelector('#note');
     if (json.code === 1) {
       json.data.forEach(ele => {
@@ -45,7 +60,7 @@
           note.innerHTML += `
           <li class="d-lg-block p-2"><a href="note.html?nid=${ele.nid}">${ele.title}</a>
             <button class="btn-a btn"  onclick="modify_page(${ele.nid})">编辑</button>
-            <button class="btn-a btn"  onclick="deleteN('note',${ele.nid})">删除</button>
+            <button class="btn-a btn"  onclick="deleteN('note', ${ele.nid})">删除</button>
           </li>`;
         }
       })

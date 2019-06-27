@@ -50,7 +50,8 @@ public class UserServiceImpl implements UserService {
     Integer uid = user.getUid();
     // add a default notebook when user register
     String title = "默认笔记本";
-    notebookService.addNotebook(title, uid);
+    String description = "默认笔记本";
+    notebookService.addNotebook(title, description, uid);
   }
 
   @Override

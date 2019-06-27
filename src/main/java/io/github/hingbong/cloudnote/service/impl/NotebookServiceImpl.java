@@ -27,26 +27,40 @@ public class NotebookServiceImpl implements NotebookService {
   private NotebookMapper notebookMapper;
   private UserService userService;
   private NoteService noteService;
+  private static final String NULL = "null";
 
   @Override
-  public void addNotebook(String title, Integer uid) {
+  public void addNotebook(String title, String description, Integer uid) {
     checkNotebook(title);
     checkUser(uid);
 
     checkNotebookTitle(title, uid);
 
-    Notebook notebook = new Notebook(title, 0, uid);
+    Notebook notebook = new Notebook(title, description, 0, uid);
     insert(notebook);
   }
 
   @Override
   public void modifyTitle(Integer nbId, String title, Integer uid) {
+    if (title == null || title.isEmpty() || NULL.equals(title)) {
+      return;
+    }
     checkNotebook(title);
     checkUserAndNotebook(uid, nbId);
 
     checkNotebookTitle(title, uid);
 
-    update(nbId, title);
+    updateTitle(nbId, title);
+  }
+
+  @Override
+  public void modifyDescription(Integer nbId, String description, Integer uid) {
+    if (description == null || description.isEmpty() || NULL.equals(description)) {
+      return;
+    }
+    checkUserAndNotebook(uid, nbId);
+
+    updateDescription(nbId, description);
   }
 
   @Override
@@ -58,6 +72,20 @@ public class NotebookServiceImpl implements NotebookService {
 
   @Override
   public Notebook findByNbId(Integer nbId) {
+    return getNotebook(nbId);
+  }
+
+  @Override
+  public Notebook findByNbIdAndUid(Integer uid, Integer nbId) {
+    Notebook notebook = getNotebook(nbId);
+    if (notebook == null || notebook.getIsDeleted().equals(1) || !notebook.getUid().equals(uid)) {
+      throw new NotebookNotFoundException("此记事本不存在");
+    }
+    notebook.setIsDeleted(null);
+    return notebook;
+  }
+
+  private Notebook getNotebook(Integer nbId) {
     return notebookMapper.findByNbId(nbId);
   }
 
@@ -86,8 +114,15 @@ public class NotebookServiceImpl implements NotebookService {
         .collect(Collectors.toList());
   }
 
-  private void update(Integer nbId, String title) {
-    Integer update = notebookMapper.updateNotebook(title, nbId);
+  private void updateTitle(Integer nbId, String title) {
+    Integer update = notebookMapper.updateNotebookTitle(title, nbId);
+    if (!update.equals(1)) {
+      throw new UpdateException("未知错误");
+    }
+  }
+
+  private void updateDescription(Integer nbId, String description) {
+    Integer update = notebookMapper.updateNotebookDescription(description, nbId);
     if (!update.equals(1)) {
       throw new UpdateException("未知错误");
     }
@@ -132,7 +167,7 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   private void checkNotebook(Integer nbId) {
-    Notebook byNbId = findByNbId(nbId);
+    Notebook byNbId = getNotebook(nbId);
     if (byNbId == null) {
       throw new NotebookNotFoundException("无此记事本");
     }

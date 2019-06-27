@@ -12,14 +12,16 @@ public class Notebook implements Serializable {
 
   private Integer nbId;
   private String title;
+  private String description;
   private Integer isDeleted;
   private Integer uid;
 
   public Notebook() {
   }
 
-  public Notebook(String title, Integer isDeleted, Integer uid) {
+  public Notebook(String title, String description, Integer isDeleted, Integer uid) {
     this.title = title;
+    this.description = description;
     this.isDeleted = isDeleted;
     this.uid = uid;
   }
@@ -41,45 +43,66 @@ public class Notebook implements Serializable {
     return Objects.hash(nbId);
   }
 
-  public Integer getIsDeleted() {
-    return isDeleted;
-  }
-
-  public void setIsDeleted(Integer isDeleted) {
-    this.isDeleted = isDeleted;
-  }
-
   public Integer getNbId() {
     return nbId;
   }
 
-  public void setNbId(Integer nbId) {
+  public Notebook setNbId(Integer nbId) {
     this.nbId = nbId;
+    return this;
   }
 
   public String getTitle() {
     return title;
   }
 
-  public void setTitle(String title) {
+  public Notebook setTitle(String title) {
     this.title = title;
+    return this;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public Notebook setDescription(String description) {
+    this.description = description;
+    return this;
+  }
+
+  public Integer getIsDeleted() {
+    return isDeleted;
+  }
+
+  public Notebook setIsDeleted(Integer isDeleted) {
+    this.isDeleted = isDeleted;
+    return this;
   }
 
   public Integer getUid() {
     return uid;
   }
 
-  public void setUid(Integer uid) {
+  public Notebook setUid(Integer uid) {
     this.uid = uid;
+    return this;
   }
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder("Notebook{");
-    sb.append("nbId=").append(nbId);
-    sb.append(", title='").append(title).append('\'');
-    sb.append(", uid=").append(uid);
-    sb.append('}');
-    return sb.toString();
+    return "Notebook{"
+        + "nbId="
+        + nbId
+        + ", title='"
+        + title
+        + '\''
+        + ", description='"
+        + description
+        + '\''
+        + ", isDeleted="
+        + isDeleted
+        + ", uid="
+        + uid
+        + '}';
   }
 }

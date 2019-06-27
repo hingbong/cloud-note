@@ -50,10 +50,17 @@ const logout = () => {
           : '').catch(e => console.log(e))
 };
 
-const modify = e => {
-  const title = prompt('标题修改为？');
-  fetch(`/notebook/${e}/${title}`, {
-    method: 'put'
+const modifyNB = (modifier, nbId, originVal) => {
+  const title = prompt('标题修改为？', originVal);
+  if (title === null || title === originVal) {
+    return false;
+  }
+  const params = new URLSearchParams();
+  params.append('nbId', nbId);
+  params.append(modifier, title);
+  fetch(`/notebook/${modifier}`, {
+    method: 'put',
+    body: params
   }).then(res => res.json()).then(
       json => json.code === 1 ? location.reload() : '').catch(
       () => location.replace('login.html'))

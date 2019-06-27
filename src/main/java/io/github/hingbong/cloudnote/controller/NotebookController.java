@@ -26,19 +26,25 @@ public class NotebookController extends BaseController {
   private NotebookService notebookService;
 
   @PostMapping
-  public JsonResponse<Void> addNotebook(String title, HttpSession session) {
+  public JsonResponse<Void> addNotebook(String title, String description, HttpSession session) {
     Integer uid = getUidFromSession(session);
-    notebookService.addNotebook(title, uid);
+    notebookService.addNotebook(title, description, uid);
     return JsonResponse.success("添加成功");
   }
 
-  @PutMapping("/{nbId}/{title}")
+  @PutMapping("/title")
   public JsonResponse<Void> modifyTitle(
-      @PathVariable("nbId") Integer nbId,
-      @PathVariable("title") String title,
-      HttpSession session) {
+      Integer nbId, String title, HttpSession session) {
     Integer uid = getUidFromSession(session);
     notebookService.modifyTitle(nbId, title, uid);
+    return JsonResponse.success("修改成功");
+  }
+
+  @PutMapping("/description")
+  public JsonResponse<Void> modifyDescription(
+      Integer nbId, String description, HttpSession session) {
+    Integer uid = getUidFromSession(session);
+    notebookService.modifyDescription(nbId, description, uid);
     return JsonResponse.success("修改成功");
   }
 
@@ -46,6 +52,14 @@ public class NotebookController extends BaseController {
   public JsonResponse<List<Notebook>> findAllByUid(HttpSession session) {
     Integer uid = getUidFromSession(session);
     return JsonResponse.success("获取成功", notebookService.findAllByUid(uid));
+  }
+
+  @GetMapping("/{nbId}")
+  public JsonResponse<Notebook> findByNbId(
+      @PathVariable("nbId") Integer nbId, HttpSession session) {
+    Integer uid = getUidFromSession(session);
+    Notebook notebook = notebookService.findByNbIdAndUid(uid, nbId);
+    return JsonResponse.success(notebook);
   }
 
   @DeleteMapping("/{nbId}")
