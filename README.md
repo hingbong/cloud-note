@@ -1,2 +1,2 @@
 # Cloud_note
-to write note and store on server
+to write notes and store them on server
