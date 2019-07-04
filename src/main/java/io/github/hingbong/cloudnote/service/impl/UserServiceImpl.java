@@ -11,8 +11,9 @@ import io.github.hingbong.cloudnote.service.excption.PasswordNotMatchException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
 import java.util.UUID;
-import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
     // random uuid
     String salt = UUID.randomUUID().toString();
     // encrypt the password
-    String sha3Password = getSha3Password(user.getPassword(), salt);
+    String sha3Password = getSha256Password(user.getPassword(), salt);
     user.setSalt(salt);
     user.setPassword(sha3Password);
 
@@ -58,26 +59,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User login(String username, String password) {
-    // check username and password
-    if (username == null || "".equals(username)) {
-      throw new UserNotFoundException("用户名不能为空");
-    }
 
     // find user in db by username
     User userInDb = findUserByUsername(username);
-    // if can't find the user in db, that's username or password wrong
-    if (userInDb == null) {
-      throw new UserNotFoundException("用户名或密码错误");
-    }
-    if (!username.equals(userInDb.getUsername())) {
-      throw new PasswordNotMatchException("用户名或密码错误");
-    }
 
-    // calculate the password and check
-    String loginSha3password = getSha3Password(password, userInDb.getSalt());
-    if (!loginSha3password.equals(userInDb.getPassword())) {
-      throw new PasswordNotMatchException("用户名或密码错误");
-    }
     userInDb.setPassword(null);
     userInDb.setSalt(null);
 
@@ -90,13 +75,13 @@ public class UserServiceImpl implements UserService {
 
     User user = findByUid(uid);
 
-    String originSha3Password = getSha3Password(originPassword, user.getSalt());
-    if (!originSha3Password.equals(user.getPassword())) {
+    String originSha256Password = getSha256Password(originPassword, user.getSalt());
+    if (!originSha256Password.equals(user.getPassword())) {
       throw new PasswordNotMatchException("原密码错误");
     }
-    String newSha3Password = getSha3Password(newPassword, user.getSalt());
+    String newSha256Password = getSha256Password(newPassword, user.getSalt());
 
-    updateUser(uid, newSha3Password);
+    updateUser(uid, newSha256Password);
   }
 
   @Override
@@ -156,23 +141,19 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   *  encrypt password by sha-3 256 with uuid three times
+   *  encrypt password by sha256 with uuid three times
    *
    * @param password origin password
    * @param salt uuid
    * @return encrypted password
    */
-  private String getSha3Password(String password, String salt) {
-    // SHA3-256, 3 times, password + salt
-    String str = password + salt;
-    int times = 3;
-    for (int i = 0; i < times; i++) {
-      str = DigestUtils.sha3_256Hex(str);
-    }
-    return str;
+  private String getSha256Password(String password, String salt) {
+    Sha256Hash sha256Hash = new Sha256Hash(password, salt, 3);
+    return sha256Hash.toHex();
   }
 
   @Autowired
+  @Lazy
   private void setNotebookService(NotebookService notebookService) {
     this.notebookService = notebookService;
   }

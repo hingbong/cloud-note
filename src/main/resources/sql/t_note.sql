@@ -10,4 +10,5 @@ CREATE TABLE IF NOT EXISTS t_note
     create_time   DATETIME    NOT NULL,
     modified_user VARCHAR(18) NOT NULL,
     modified_time DATETIME    NOT NULL
-);
+) ENGINE INNODB
+  CHARACTER SET utf8mb4;

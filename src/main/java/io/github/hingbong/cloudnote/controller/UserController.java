@@ -4,6 +4,9 @@ import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.service.UserService;
 import io.github.hingbong.cloudnote.util.JsonResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,14 +47,20 @@ public class UserController extends BaseController {
    */
   @PostMapping("/session")
   public JsonResponse<User> login(String username, String password, HttpSession session) {
+    Subject subject = SecurityUtils.getSubject();
+    UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+    subject.login(token);
+    // get user info
     User login = userService.login(username, password);
     session.setAttribute("uid", login.getUid());
     session.setAttribute("username", login.getUsername());
-    return JsonResponse.success("登录成功", login);
+    return JsonResponse.success("登录成功");
   }
 
   @DeleteMapping("/session")
   public JsonResponse<Void> logout(HttpSession session) {
+    SecurityUtils.getSubject().logout();
+    session.removeAttribute("uid");
     session.removeAttribute("uid");
     return JsonResponse.success("注销成功");
   }
