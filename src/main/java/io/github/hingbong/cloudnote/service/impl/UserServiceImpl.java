@@ -11,11 +11,16 @@ import io.github.hingbong.cloudnote.service.excption.PasswordNotMatchException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
 import java.util.UUID;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * implement of UserService
@@ -57,6 +62,19 @@ public class UserServiceImpl implements UserService {
     notebookService.addNotebook(title, description, uid);
   }
 
+  @Override
+  public void login(String username, String password) {
+    if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
+      throw new PasswordNotMatchException("用户名密码错误");
+    }
+    Subject subject = SecurityUtils.getSubject();
+    UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+    try {
+      subject.login(token);
+    } catch (IncorrectCredentialsException e) {
+      throw new PasswordNotMatchException("用户名或密码错误");
+    }
+  }
 
   @Override
   public void changePassword(Integer uid, String originPassword, String newPassword) {

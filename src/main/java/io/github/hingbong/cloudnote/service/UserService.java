@@ -16,14 +16,13 @@ public interface UserService {
    */
   void register(User user);
 
-//  /**
-//   * login service
-//   *
-//   * @param username username
-//   * @param password password
-//   * @return the user who is login
-//   */
-//  User login(String username, String password);
+  /**
+   * login service
+   *
+   * @param username username
+   * @param password password
+   */
+  void login(String username, String password);
 
   /**
    * change user's password

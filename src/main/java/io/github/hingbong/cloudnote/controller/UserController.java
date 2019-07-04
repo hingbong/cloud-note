@@ -4,8 +4,6 @@ import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.service.UserService;
 import io.github.hingbong.cloudnote.util.JsonResponse;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,9 +43,7 @@ public class UserController extends BaseController {
    */
   @PostMapping("/session")
   public JsonResponse<User> login(String username, String password) {
-    Subject subject = SecurityUtils.getSubject();
-    UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-    subject.login(token);
+    userService.login(username, password);
     User user = new User().setUsername(getUsernameFromSession()).setUid(getUidFromSession());
     return JsonResponse.success("登录成功", user);
   }

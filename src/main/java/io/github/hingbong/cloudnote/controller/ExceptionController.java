@@ -35,7 +35,7 @@ public class ExceptionController extends BaseController {
   @ExceptionHandler(ServiceException.class)
   public JsonResponse exceptionHandler(final Throwable throwable) {
     System.err.println(LocalDateTime.now() + " ==> " + throwable);
-    String msg;
+    String msg = throwable.getMessage();
     int status;
     if (throwable instanceof FormatNotMatchException) {
       status = FORMAT_NOT_MATCH;
@@ -45,6 +45,7 @@ public class ExceptionController extends BaseController {
       status = USER_NOT_FOUND;
     } else if (throwable instanceof PasswordNotMatchException) {
       status = PASSWORD_NOT_MATCH;
+      msg = "用户名或密码错误";
     } else if (throwable instanceof DuplicateTitleException) {
       status = DUPLICATE_TITLE;
     } else if (throwable instanceof NotebookNotFoundException) {
@@ -62,7 +63,6 @@ public class ExceptionController extends BaseController {
     } else {
       status = NOT_SUCCESS;
     }
-    msg = throwable.getMessage();
     return JsonResponse.exception(status, msg);
   }
 }
