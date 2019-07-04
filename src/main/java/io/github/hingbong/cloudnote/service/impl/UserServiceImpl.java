@@ -57,17 +57,6 @@ public class UserServiceImpl implements UserService {
     notebookService.addNotebook(title, description, uid);
   }
 
-  @Override
-  public User login(String username, String password) {
-
-    // find user in db by username
-    User userInDb = findUserByUsername(username);
-
-    userInDb.setPassword(null);
-    userInDb.setSalt(null);
-
-    return userInDb;
-  }
 
   @Override
   public void changePassword(Integer uid, String originPassword, String newPassword) {

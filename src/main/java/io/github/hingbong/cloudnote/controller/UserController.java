@@ -3,7 +3,6 @@ package io.github.hingbong.cloudnote.controller;
 import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.service.UserService;
 import io.github.hingbong.cloudnote.util.JsonResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -42,23 +41,19 @@ public class UserController extends BaseController {
    * login
    *
    * @param username username for login
-   * @param session session for storing login status
    * @return success json
    */
   @PostMapping("/session")
-  public JsonResponse<User> login(String username, String password, HttpSession session) {
+  public JsonResponse<User> login(String username, String password) {
     Subject subject = SecurityUtils.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(username, password);
     subject.login(token);
-    // get user info
-    User login = userService.login(username, password);
-    session.setAttribute("uid", login.getUid());
-    session.setAttribute("username", login.getUsername());
-    return JsonResponse.success("登录成功");
+    User user = new User().setUsername(getUsernameFromSession()).setUid(getUidFromSession());
+    return JsonResponse.success("登录成功", user);
   }
 
   @DeleteMapping("/session")
-  public JsonResponse<Void> logout(HttpSession session) {
+  public JsonResponse<Void> logout() {
     SecurityUtils.getSubject().logout();
     return JsonResponse.success("注销成功");
   }
@@ -66,9 +61,8 @@ public class UserController extends BaseController {
   @PutMapping("/password")
   public JsonResponse<Void> changePassword(
       @RequestParam("origin_password") String originPassword,
-      @RequestParam("new_password") String newPassword,
-      HttpSession session) {
-    Integer uid = getUidFromSession(session);
+      @RequestParam("new_password") String newPassword) {
+    Integer uid = getUidFromSession();
     userService.changePassword(uid, originPassword, newPassword);
     return JsonResponse.success("修改成功");
   }

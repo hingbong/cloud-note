@@ -20,40 +20,45 @@ public class User implements Serializable {
     return uid;
   }
 
-  public void setUid(Integer uid) {
+  public User setUid(Integer uid) {
     this.uid = uid;
+    return this;
   }
 
   public String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
+  public User setUsername(String username) {
     this.username = username;
+    return this;
   }
 
   public String getNickname() {
     return nickname;
   }
 
-  public void setNickname(String nickname) {
+  public User setNickname(String nickname) {
     this.nickname = nickname;
+    return this;
   }
 
   public String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
+  public User setPassword(String password) {
     this.password = password;
+    return this;
   }
 
   public String getSalt() {
     return salt;
   }
 
-  public void setSalt(String salt) {
+  public User setSalt(String salt) {
     this.salt = salt;
+    return this;
   }
 
   @Override

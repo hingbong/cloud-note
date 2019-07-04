@@ -4,7 +4,6 @@ import io.github.hingbong.cloudnote.entity.Note;
 import io.github.hingbong.cloudnote.service.NoteService;
 import io.github.hingbong.cloudnote.util.JsonResponse;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +25,9 @@ public class NoteController extends BaseController {
   private NoteService noteService;
 
   @PostMapping
-  public JsonResponse<Void> addNote(HttpSession session, Note note) {
-    Integer uid = getUidFromSession(session);
-    String username = getUsernameFromSession(session);
+  public JsonResponse<Void> addNote(Note note) {
+    Integer uid = getUidFromSession();
+    String username = getUsernameFromSession();
     noteService.addNote(uid, username, note);
     return JsonResponse.success("添加成功");
   }
@@ -46,47 +45,47 @@ public class NoteController extends BaseController {
   }
 
   @GetMapping("/{nbId}")
-  public JsonResponse<List<Note>> getNotesByNbId(HttpSession session, @PathVariable Integer nbId) {
-    Integer uid = getUidFromSession(session);
+  public JsonResponse<List<Note>> getNotesByNbId(@PathVariable Integer nbId) {
+    Integer uid = getUidFromSession();
     List<Note> notes = noteService.getNoteByNotebook(uid, nbId);
     return JsonResponse.success(notes);
   }
 
   @GetMapping("/note/{nid}")
-  public JsonResponse<Note> getNoteByNid(HttpSession session, @PathVariable Integer nid) {
-    Integer uid = getUidFromSession(session);
+  public JsonResponse<Note> getNoteByNid(@PathVariable Integer nid) {
+    Integer uid = getUidFromSession();
     Note note = noteService.getNoteByNid(uid, nid);
     return JsonResponse.success(note);
   }
 
   @PutMapping
-  public JsonResponse<Void> modifyNote(HttpSession session, Note note) {
-    Integer uid = getUidFromSession(session);
-    String username = getUsernameFromSession(session);
+  public JsonResponse<Void> modifyNote(Note note) {
+    Integer uid = getUidFromSession();
+    String username = getUsernameFromSession();
     noteService.modifyNote(uid, username, note);
     return JsonResponse.success();
   }
 
   @PutMapping("/{nid}/shared")
-  public JsonResponse<Void> setShared(HttpSession session, @PathVariable("nid") Integer nid) {
-    String username = getUsernameFromSession(session);
-    Integer uid = getUidFromSession(session);
+  public JsonResponse<Void> setShared(@PathVariable("nid") Integer nid) {
+    String username = getUsernameFromSession();
+    Integer uid = getUidFromSession();
     noteService.setShared(uid, username, nid);
     return JsonResponse.success();
   }
 
   @PutMapping("/{nid}/unshared")
-  public JsonResponse<Void> unsetShared(HttpSession session, @PathVariable("nid") Integer nid) {
-    String username = getUsernameFromSession(session);
-    Integer uid = getUidFromSession(session);
+  public JsonResponse<Void> unsetShared(@PathVariable("nid") Integer nid) {
+    String username = getUsernameFromSession();
+    Integer uid = getUidFromSession();
     noteService.unsetShared(uid, username, nid);
     return JsonResponse.success();
   }
 
   @DeleteMapping("/{nid}")
-  public JsonResponse<Void> deleteNote(HttpSession session, @PathVariable("nid") Integer nid) {
-    String username = getUsernameFromSession(session);
-    Integer uid = getUidFromSession(session);
+  public JsonResponse<Void> deleteNote(@PathVariable("nid") Integer nid) {
+    String username = getUsernameFromSession();
+    Integer uid = getUidFromSession();
     noteService.deleteNote(uid, username, nid);
     return JsonResponse.success();
   }

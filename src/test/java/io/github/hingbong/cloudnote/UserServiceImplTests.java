@@ -20,16 +20,6 @@ class UserServiceImplTests {
     service.register(u);
   }
 
-  @Test
-  void login() {
-    User u = new User();
-    u.setUsername("奥特曼");
-    u.setNickname("特慢奥");
-    u.setPassword("1234");
-    service.login("奥特曼", "1234");
-  }
-
-
   @Autowired
   void setService(UserService service) {
     this.service = service;

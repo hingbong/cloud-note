@@ -1,6 +1,7 @@
 package io.github.hingbong.cloudnote.controller;
 
-import javax.servlet.http.HttpSession;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 
 /**
  * some attributions for use
@@ -22,11 +23,15 @@ public abstract class BaseController {
   static final int NOT_SUCCESS = 0;
   static final int SOME_THING_ERROR = 5001;
 
-  final Integer getUidFromSession(HttpSession session) {
-    return Integer.valueOf(session.getAttribute("uid").toString());
+  private Session getSession() {
+    return SecurityUtils.getSubject().getSession();
   }
 
-  final String getUsernameFromSession(HttpSession session) {
-    return session.getAttribute("username").toString();
+  final Integer getUidFromSession() {
+    return Integer.valueOf(getSession().getAttribute("uid").toString());
+  }
+
+  final String getUsernameFromSession() {
+    return getSession().getAttribute("username").toString();
   }
 }
