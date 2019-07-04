@@ -60,8 +60,6 @@ public class UserController extends BaseController {
   @DeleteMapping("/session")
   public JsonResponse<Void> logout(HttpSession session) {
     SecurityUtils.getSubject().logout();
-    session.removeAttribute("uid");
-    session.removeAttribute("uid");
     return JsonResponse.success("注销成功");
   }
 
