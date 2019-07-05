@@ -22,7 +22,7 @@ public interface UserService {
    * @param username username
    * @param password password
    */
-  void login(String username, String password);
+  void login(String username, String password, Boolean rememberMe);
 
   /**
    * change user's password

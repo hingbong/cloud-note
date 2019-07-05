@@ -2,6 +2,9 @@ const send_form = (form, method, forward) => {
   const notice = document.querySelector('#notice');
   const body = new URLSearchParams();
   Array.from(form).forEach(ele => body.append(ele.name, ele.value));
+  if (form[2].name === 'remember_me') {
+    body.set('remember_me', form[2].checked);
+  }
   fetch(form.action, {
     method: method,
     body: body

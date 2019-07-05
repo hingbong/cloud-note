@@ -42,8 +42,12 @@ public class UserController extends BaseController {
    * @return success json
    */
   @PostMapping("/session")
-  public JsonResponse<User> login(String username, String password) {
-    userService.login(username, password);
+  public JsonResponse<User> login(
+      String username,
+      String password,
+      @RequestParam(value = "remember_me", required = false) String rememberMe) {
+    System.err.println(rememberMe);
+    userService.login(username, password, Boolean.valueOf(rememberMe));
     User user = new User().setUsername(getUsernameFromSession()).setUid(getUidFromSession());
     return JsonResponse.success("登录成功", user);
   }

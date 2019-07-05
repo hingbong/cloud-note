@@ -2,11 +2,15 @@ package io.github.hingbong.cloudnote.configuration;
 
 import io.github.hingbong.cloudnote.service.realm.UserRealm;
 import java.util.LinkedHashMap;
+import org.apache.shiro.codec.Base64;
+import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +20,29 @@ import org.springframework.context.annotation.Lazy;
 @Configuration
 public class ShiroConfiguration {
 
+  private static final int SECONDS_OF_DAY = 60 * 60 * 24;
+
   @Bean
-  public DefaultWebSecurityManager getSecurityManager(@Autowired UserRealm realm) {
+  public SimpleCookie rememberMeCookie() {
+    SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+    simpleCookie.setMaxAge(30 * SECONDS_OF_DAY);
+    return simpleCookie;
+  }
+
+  @Bean
+  public CookieRememberMeManager getRememberMeManager(@Autowired SimpleCookie rememberMeCookie) {
+    CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+    cookieRememberMeManager.setCookie(rememberMeCookie);
+    cookieRememberMeManager.setCipherKey(Base64.decode("2AvVhdsgUs0FSA3SDFAdag=="));
+    return cookieRememberMeManager;
+  }
+
+  @Bean
+  public DefaultWebSecurityManager getSecurityManager(
+      @Autowired UserRealm realm, @Autowired RememberMeManager rememberMeManager) {
     DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
     securityManager.setRealm(realm);
+    securityManager.setRememberMeManager(rememberMeManager);
     return securityManager;
   }
 
@@ -42,7 +65,7 @@ public class ShiroConfiguration {
     map.put("/user/session", "anon");
     map.put("/note/notes/shared/all", "anon");
     map.put("/note/shared/note/one/**", "anon");
-    map.put("/**", "authc");
+    map.put("/**", "user");
     bean.setFilterChainDefinitionMap(map);
     return bean;
   }
