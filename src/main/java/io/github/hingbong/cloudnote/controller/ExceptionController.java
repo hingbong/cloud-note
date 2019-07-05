@@ -11,6 +11,7 @@ import io.github.hingbong.cloudnote.service.excption.InvalidNoteException;
 import io.github.hingbong.cloudnote.service.excption.NotebookNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.PasswordNotMatchException;
 import io.github.hingbong.cloudnote.service.excption.ServiceException;
+import io.github.hingbong.cloudnote.service.excption.SessionInvalidException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
 import io.github.hingbong.cloudnote.util.JsonResponse;
@@ -45,7 +46,6 @@ public class ExceptionController extends BaseController {
       status = USER_NOT_FOUND;
     } else if (throwable instanceof PasswordNotMatchException) {
       status = PASSWORD_NOT_MATCH;
-      msg = "用户名或密码错误";
     } else if (throwable instanceof DuplicateTitleException) {
       status = DUPLICATE_TITLE;
     } else if (throwable instanceof NotebookNotFoundException) {
@@ -56,6 +56,8 @@ public class ExceptionController extends BaseController {
       status = DELETE_DEFAULT_NOTEBOOK;
     } else if (throwable instanceof AccessDeniedException) {
       status = ACCESS_DENIED;
+    } else if (throwable instanceof SessionInvalidException) {
+      status = SESSION_INVALID;
     } else if (throwable instanceof InsertException
         || throwable instanceof UpdateException
         || throwable instanceof DeleteException) {

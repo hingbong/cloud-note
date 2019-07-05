@@ -1,5 +1,6 @@
 package io.github.hingbong.cloudnote.service.realm;
 
+import io.github.hingbong.cloudnote.configuration.ShiroConfiguration;
 import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.mapper.UserMapper;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
@@ -51,6 +52,7 @@ public class UserRealm extends AuthorizingRealm {
       throw new UserNotFoundException();
     }
     Session session = SecurityUtils.getSubject().getSession();
+    session.setTimeout(ShiroConfiguration.SECONDS_OF_DAY * 30 * 1000L);
     session.setAttribute("username", user.getUsername());
     session.setAttribute("uid", user.getUid());
     return new SimpleAuthenticationInfo(

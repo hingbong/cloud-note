@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Lazy;
 @Configuration
 public class ShiroConfiguration {
 
-  private static final int SECONDS_OF_DAY = 60 * 60 * 24;
+  public static final int SECONDS_OF_DAY = 60 * 60 * 24;
 
   @Bean(name = "rememberMeCookie")
   public SimpleCookie rememberMeCookie() {
@@ -72,6 +72,7 @@ public class ShiroConfiguration {
     ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
     bean.setSecurityManager(securityManager);
     bean.setLoginUrl("/login.html");
+    bean.setSuccessUrl("/notebooks.html");
     LinkedHashMap<String, String> map = new LinkedHashMap<>(18);
     map.put("/css/**", "anon");
     map.put("/images/**", "anon");
