@@ -24,6 +24,13 @@ public class NotebookController extends BaseController {
 
   private NotebookService notebookService;
 
+  /**
+   * add notebook
+   *
+   * @param title notebook title
+   * @param description notebook description
+   * @return response
+   */
   @PostMapping
   public JsonResponse<Void> addNotebook(String title, String description) {
     Integer uid = getUidFromSession();
@@ -31,6 +38,13 @@ public class NotebookController extends BaseController {
     return JsonResponse.success("添加成功");
   }
 
+  /**
+   * change notebook title
+   *
+   * @param nbId notebook id
+   * @param title new notebook title
+   * @return response
+   */
   @PutMapping("/title")
   public JsonResponse<Void> modifyTitle(Integer nbId, String title) {
     Integer uid = getUidFromSession();
@@ -38,6 +52,13 @@ public class NotebookController extends BaseController {
     return JsonResponse.success("修改成功");
   }
 
+  /**
+   * change notebook description
+   *
+   * @param nbId nbId notebook id
+   * @param description new notebook description
+   * @return response
+   */
   @PutMapping("/description")
   public JsonResponse<Void> modifyDescription(Integer nbId, String description) {
     Integer uid = getUidFromSession();
@@ -45,12 +66,23 @@ public class NotebookController extends BaseController {
     return JsonResponse.success("修改成功");
   }
 
+  /**
+   * get notebooks of user
+   *
+   * @return response
+   */
   @GetMapping
   public JsonResponse<List<Notebook>> findAllByUid() {
     Integer uid = getUidFromSession();
     return JsonResponse.success("获取成功", notebookService.findAllByUid(uid));
   }
 
+  /**
+   * get one notebook of user
+   *
+   * @param nbId notebook id
+   * @return response
+   */
   @GetMapping("/{nbId}")
   public JsonResponse<Notebook> findByNbId(@PathVariable("nbId") Integer nbId) {
     Integer uid = getUidFromSession();
@@ -58,6 +90,12 @@ public class NotebookController extends BaseController {
     return JsonResponse.success(notebook);
   }
 
+  /**
+   * delete a notebook
+   *
+   * @param nbId notebook id
+   * @return response
+   */
   @DeleteMapping("/{nbId}")
   public JsonResponse<Void> delete(@PathVariable Integer nbId) {
     Integer uid = getUidFromSession();

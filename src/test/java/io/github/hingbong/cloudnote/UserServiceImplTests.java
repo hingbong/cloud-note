@@ -15,7 +15,6 @@ class UserServiceImplTests {
   void testReg() {
     User u = new User();
     u.setUsername("奥特曼");
-    u.setNickname("特慢奥");
     u.setPassword("1234");
     service.register(u);
   }

@@ -20,6 +20,11 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * for user login
+ *
+ * @author hingbong
+ */
 @Service
 public class UserRealm extends AuthorizingRealm {
 
@@ -27,21 +32,30 @@ public class UserRealm extends AuthorizingRealm {
 
   @Override
   public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-    // 构建凭证匹配对象
     HashedCredentialsMatcher cMatcher = new HashedCredentialsMatcher();
-    // 设置加密算法
+    // set hash algorithm
     cMatcher.setHashAlgorithmName("SHA-256");
-    // 设置加密次数
+    // set encrypt times
     cMatcher.setHashIterations(3);
     super.setCredentialsMatcher(cMatcher);
   }
 
+  /**
+   * only anon and user, so don't need this
+   *
+   * @param principals principals
+   * @return authorization info
+   */
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-
     return null;
   }
 
+  /**
+   * @param token have authentication info
+   * @return authentication info
+   * @throws AuthenticationException if can't authenticate
+   */
   @Override
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
       throws AuthenticationException {

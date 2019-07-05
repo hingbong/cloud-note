@@ -5,12 +5,12 @@
 <mapper namespace="io.github.hingbong.cloudnote.mapper.UserMapper">
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="uid">
-    INSERT INTO t_user (username, nickname, password, salt)
-    VALUES (#{username}, #{nickname}, #{password}, #{salt})
+    INSERT INTO t_user (username, password, salt)
+    VALUES (#{username}, #{password}, #{salt})
   </insert>
 
   <select id="findUserByUsername" resultType="io.github.hingbong.cloudnote.entity.User">
-    SELECT uid, username, nickname, password, salt
+    SELECT uid, username, password, salt
     FROM t_user
     WHERE username = #{username}
   </select>
@@ -22,7 +22,7 @@
   </update>
 
   <select id="findByUid" resultType="io.github.hingbong.cloudnote.entity.User">
-    SELECT uid, username, password, nickname, salt
+    SELECT uid, username, password, salt
     FROM t_user
     WHERE uid = #{uid}
   </select>

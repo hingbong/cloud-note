@@ -15,7 +15,6 @@ class UserMapperTests {
   void insert() {
     User u = new User();
     u.setUsername("奥特曼");
-    u.setNickname("特慢奥");
     u.setPassword("1234");
     Integer insert = userMapper.insert(u);
     System.out.println(insert);

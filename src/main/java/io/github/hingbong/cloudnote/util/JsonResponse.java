@@ -62,7 +62,7 @@ public class JsonResponse<T> implements Serializable {
    * new a exception json response entity
    *
    * @param code exception code
-   * @param msg  exception message
+   * @param msg exception message
    * @return the whole entity
    */
   public static JsonResponse exception(int code, String msg) {

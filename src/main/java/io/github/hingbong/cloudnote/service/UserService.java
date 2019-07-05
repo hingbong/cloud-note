@@ -21,6 +21,8 @@ public interface UserService {
    *
    * @param username username
    * @param password password
+   * @param rememberMe remember me or not
+   * @param host remote host
    */
   void login(String username, String password, Boolean rememberMe, String host);
 
@@ -33,5 +35,11 @@ public interface UserService {
    */
   void changePassword(Integer uid, String originPassword, String newPassword);
 
+  /**
+   * find user by user id
+   *
+   * @param uid user id
+   * @return user
+   */
   User findByUid(Integer uid);
 }

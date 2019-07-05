@@ -12,7 +12,6 @@ public class User implements Serializable {
 
   private Integer uid;
   private String username;
-  private String nickname;
   private String password;
   private String salt;
 
@@ -31,15 +30,6 @@ public class User implements Serializable {
 
   public User setUsername(String username) {
     this.username = username;
-    return this;
-  }
-
-  public String getNickname() {
-    return nickname;
-  }
-
-  public User setNickname(String nickname) {
-    this.nickname = nickname;
     return this;
   }
 
@@ -66,7 +56,6 @@ public class User implements Serializable {
     final StringBuilder sb = new StringBuilder("User{");
     sb.append("uid=").append(uid);
     sb.append(", username='").append(username).append('\'');
-    sb.append(", nickname='").append(nickname).append('\'');
     sb.append(", password='").append(password).append('\'');
     sb.append(", salt='").append(salt).append('\'');
     sb.append('}');

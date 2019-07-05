@@ -86,7 +86,6 @@ public class NotebookServiceImpl implements NotebookService {
     return notebook;
   }
 
-
   @Override
   @Transactional
   public void delete(Integer uid, Integer nbId) {
@@ -101,6 +100,7 @@ public class NotebookServiceImpl implements NotebookService {
   private Notebook getNotebook(Integer nbId) {
     return notebookMapper.findByNbId(nbId);
   }
+
   private Integer checkDeleteDefault(Integer nbId) {
     Notebook defaultNotebook = notebookMapper.findDefaultNotebook(nbId);
     if (nbId.equals(defaultNotebook.getNbId())) {

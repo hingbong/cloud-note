@@ -39,7 +39,7 @@ public interface UserMapper {
   /**
    * update password by user id
    *
-   * @param uid      user id
+   * @param uid user id
    * @param password new password
    * @return rows affected
    */

@@ -30,6 +30,11 @@ public interface NoteMapper {
    */
   List<Note> findAllInOneNotebook(Integer nbId);
 
+  /**
+   * find all shared notes
+   *
+   * @return all shared notes
+   */
   List<Note> findAllSharedNotes();
 
   /**
@@ -44,15 +49,39 @@ public interface NoteMapper {
    * mark a note is deleted
    *
    * @param nid note id
+   * @param modifiedUser user of modifying note
+   * @param modifiedTime time of modifying note
    * @return rows affected
    */
-  Integer markIsDeleted(@Param("nid") Integer nid, @Param("modifiedUser") String modifiedUser,
+  Integer markIsDeleted(
+      @Param("nid") Integer nid,
+      @Param("modifiedUser") String modifiedUser,
       @Param("modifiedTime") LocalDateTime modifiedTime);
 
-  Integer markIsShared(@Param("nid") Integer nid, @Param("modifiedUser") String modifiedUser,
+  /**
+   * change note to shared status
+   *
+   * @param nid note id
+   * @param modifiedUser modifiedUser user of modifying note
+   * @param modifiedTime modifiedTime time of modifying note
+   * @return rows affected
+   */
+  Integer markIsShared(
+      @Param("nid") Integer nid,
+      @Param("modifiedUser") String modifiedUser,
       @Param("modifiedTime") LocalDateTime modifiedTime);
 
-  Integer cancelShared(@Param("nid") Integer nid, @Param("modifiedUser") String modifiedUser,
+  /**
+   * change note to unshared status
+   *
+   * @param nid nid note id
+   * @param modifiedUser modifiedUser modifiedUser user of modifying note
+   * @param modifiedTime modifiedTime time of modifying note
+   * @return rows affected
+   */
+  Integer cancelShared(
+      @Param("nid") Integer nid,
+      @Param("modifiedUser") String modifiedUser,
       @Param("modifiedTime") LocalDateTime modifiedTime);
 
   /**
@@ -67,7 +96,7 @@ public interface NoteMapper {
    * when delete a notebook, move all notes to default notebook
    *
    * @param defaultNbId default notebook id
-   * @param nowNbId     now notebook id
+   * @param nowNbId now notebook id
    * @return rows affected
    */
   Integer moveNoteToDefaultNotebook(

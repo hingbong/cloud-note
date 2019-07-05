@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
   private NotebookService notebookService;
 
   @Override
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public void register(User user) {
     // check the user's information
     checkUser(user);
@@ -141,9 +141,6 @@ public class UserServiceImpl implements UserService {
     }
     if (user.getPassword() == null || "".equals(user.getPassword())) {
       throw new FormatNotMatchException("密码无效");
-    }
-    if (user.getNickname() == null || "".equals(user.getNickname())) {
-      throw new FormatNotMatchException("昵称无效");
     }
   }
 

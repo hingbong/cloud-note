@@ -18,11 +18,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
+/**
+ * configuration of shiro
+ *
+ * @author hingbong
+ */
 @Configuration
 public class ShiroConfiguration {
 
+  /**
+   * one day's seconds
+   */
   public static final int SECONDS_OF_DAY = 60 * 60 * 24;
 
+  /**
+   * set remember me's cookie's max age
+   *
+   * @return remember me's cookie
+   */
   @Bean(name = "rememberMeCookie")
   public SimpleCookie rememberMeCookie() {
     SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
@@ -30,6 +43,12 @@ public class ShiroConfiguration {
     return simpleCookie;
   }
 
+  /**
+   * set remember me's cookie manager
+   *
+   * @param rememberMeCookie remember me's cookie
+   * @return remember me's cookie manager
+   */
   @Bean
   public CookieRememberMeManager getRememberMeManager(@Autowired SimpleCookie rememberMeCookie) {
     CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
@@ -38,6 +57,11 @@ public class ShiroConfiguration {
     return cookieRememberMeManager;
   }
 
+  /**
+   * set session id's name and max age
+   *
+   * @return session id cookie
+   */
   @Bean(name = "sessionIdCookie")
   public SimpleCookie sessionIdCookie() {
     SimpleCookie simpleCookie = new SimpleCookie("shiroSid");
@@ -45,6 +69,12 @@ public class ShiroConfiguration {
     return simpleCookie;
   }
 
+  /**
+   * session manager
+   *
+   * @param sessionIdCookie session id cookie
+   * @return session manager
+   */
   @Bean
   public DefaultWebSessionManager getDefaultWebSessionManager(
       @Autowired SimpleCookie sessionIdCookie) {
@@ -54,6 +84,14 @@ public class ShiroConfiguration {
     return sessionManager;
   }
 
+  /**
+   * set SecurityManager
+   *
+   * @param realm realm for user login
+   * @param rememberMeManager remember me's cookie manager
+   * @param defaultWebSessionManager session manager
+   * @return SecurityManager
+   */
   @Bean
   public DefaultWebSecurityManager getSecurityManager(
       @Autowired UserRealm realm,
@@ -66,6 +104,12 @@ public class ShiroConfiguration {
     return securityManager;
   }
 
+  /**
+   * set path
+   *
+   * @param securityManager SecurityManager
+   * @return ShiroFilterFactoryBean
+   */
   @Bean
   public ShiroFilterFactoryBean getShiroFilterFactoryBean(
       @Autowired SecurityManager securityManager) {
@@ -73,7 +117,7 @@ public class ShiroConfiguration {
     bean.setSecurityManager(securityManager);
     bean.setLoginUrl("/login.html");
     bean.setSuccessUrl("/notebooks.html");
-    LinkedHashMap<String, String> map = new LinkedHashMap<>(18);
+    LinkedHashMap<String, String> map = new LinkedHashMap<>(15, 1);
     map.put("/css/**", "anon");
     map.put("/images/**", "anon");
     map.put("/js/**", "anon");

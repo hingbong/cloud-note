@@ -26,18 +26,34 @@ public abstract class BaseController {
   static final int NOT_SUCCESS = 0;
   static final int SOME_THING_ERROR = 5001;
 
+  /**
+   * get shiro subject
+   *
+   * @return shiro subject
+   */
   private Subject getSubject() {
     return SecurityUtils.getSubject();
   }
 
+  /**
+   * get shiro session
+   *
+   * @return session
+   */
   final Session getSession() {
     return getSubject().getSession();
   }
 
+  /**
+   * get uid from session
+   *
+   * @return user id
+   */
   final Integer getUidFromSession() {
     Object uid = getSession().getAttribute("uid");
     Subject subject = getSubject();
     if (uid == null) {
+      // if browser have unknown cookie, remove it
       if (subject.isRemembered()) {
         SecurityUtils.getSubject().logout();
       }
@@ -46,10 +62,16 @@ public abstract class BaseController {
     return Integer.valueOf(uid.toString());
   }
 
+  /**
+   * get user name from session
+   *
+   * @return user name
+   */
   final String getUsernameFromSession() {
     Object username = getSession().getAttribute("username");
     Subject subject = getSubject();
     if (username == null) {
+      // if browser have unknown cookie, remove it
       if (subject.isRemembered()) {
         SecurityUtils.getSubject().logout();
       }

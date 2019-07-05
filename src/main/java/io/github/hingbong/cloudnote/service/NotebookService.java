@@ -14,6 +14,7 @@ public interface NotebookService {
    * add a new notebook
    *
    * @param title notebook title
+   * @param description notebook description
    * @param uid user id
    */
   void addNotebook(String title, String description, Integer uid);
@@ -27,6 +28,13 @@ public interface NotebookService {
    */
   void modifyTitle(Integer nbId, String title, Integer uid);
 
+  /**
+   * update notebook description
+   *
+   * @param uid user id
+   * @param description notebook description
+   * @param nbId notebook id
+   */
   void modifyDescription(Integer nbId, String description, Integer uid);
 
   /**
@@ -53,5 +61,12 @@ public interface NotebookService {
    */
   Notebook findByNbId(Integer nbId);
 
+  /**
+   * find notes by user and notebook
+   *
+   * @param uid user id
+   * @param nbId notebook id
+   * @return response
+   */
   Notebook findByNbIdAndUid(Integer uid, Integer nbId);
 }

@@ -24,6 +24,12 @@ public class NoteController extends BaseController {
 
   private NoteService noteService;
 
+  /**
+   * add a note
+   *
+   * @param note new note
+   * @return response
+   */
   @PostMapping
   public JsonResponse<Void> addNote(Note note) {
     Integer uid = getUidFromSession();
@@ -32,18 +38,35 @@ public class NoteController extends BaseController {
     return JsonResponse.success("添加成功");
   }
 
+  /**
+   * get all shared notes
+   *
+   * @return response
+   */
   @GetMapping("/notes/shared/all")
   public JsonResponse<List<Note>> getAllSharedNotes() {
     List<Note> noteList = noteService.getAllSharedNotes();
     return JsonResponse.success(noteList);
   }
 
+  /**
+   * get one shared note
+   *
+   * @param nid note id
+   * @return response
+   */
   @GetMapping("/shared/note/one/{nid}")
   public JsonResponse<Note> getSharedNoteByNid(@PathVariable Integer nid) {
     Note noteList = noteService.getNoteByNid(nid);
     return JsonResponse.success(noteList);
   }
 
+  /**
+   * get all notes in one notebook
+   *
+   * @param nbId notebook
+   * @return response
+   */
   @GetMapping("/{nbId}")
   public JsonResponse<List<Note>> getNotesByNbId(@PathVariable Integer nbId) {
     Integer uid = getUidFromSession();
@@ -51,6 +74,12 @@ public class NoteController extends BaseController {
     return JsonResponse.success(notes);
   }
 
+  /**
+   * get one note
+   *
+   * @param nid note id
+   * @return response
+   */
   @GetMapping("/note/{nid}")
   public JsonResponse<Note> getNoteByNid(@PathVariable Integer nid) {
     Integer uid = getUidFromSession();
@@ -58,6 +87,12 @@ public class NoteController extends BaseController {
     return JsonResponse.success(note);
   }
 
+  /**
+   * update note
+   *
+   * @param note new note
+   * @return response
+   */
   @PutMapping
   public JsonResponse<Void> modifyNote(Note note) {
     Integer uid = getUidFromSession();
@@ -66,6 +101,12 @@ public class NoteController extends BaseController {
     return JsonResponse.success();
   }
 
+  /**
+   * change note sharing status to shared
+   *
+   * @param nid note id
+   * @return response
+   */
   @PutMapping("/{nid}/shared")
   public JsonResponse<Void> setShared(@PathVariable("nid") Integer nid) {
     String username = getUsernameFromSession();
@@ -74,6 +115,12 @@ public class NoteController extends BaseController {
     return JsonResponse.success();
   }
 
+  /**
+   * change note sharing status to unshared
+   *
+   * @param nid note id
+   * @return response
+   */
   @PutMapping("/{nid}/unshared")
   public JsonResponse<Void> unsetShared(@PathVariable("nid") Integer nid) {
     String username = getUsernameFromSession();
@@ -82,6 +129,12 @@ public class NoteController extends BaseController {
     return JsonResponse.success();
   }
 
+  /**
+   * delete a note
+   *
+   * @param nid note id
+   * @return response
+   */
   @DeleteMapping("/{nid}")
   public JsonResponse<Void> deleteNote(@PathVariable("nid") Integer nid) {
     String username = getUsernameFromSession();

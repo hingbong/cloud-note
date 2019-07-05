@@ -26,7 +26,7 @@ public class UserController extends BaseController {
   /**
    * register
    *
-   * @param user user for register
+   * @param user user info for register
    * @return success json
    */
   @PostMapping
@@ -52,12 +52,24 @@ public class UserController extends BaseController {
     return JsonResponse.success("登录成功", user);
   }
 
+  /**
+   * logout
+   *
+   * @return response
+   */
   @DeleteMapping("/session")
   public JsonResponse<Void> logout() {
     SecurityUtils.getSubject().logout();
     return JsonResponse.success("注销成功");
   }
 
+  /**
+   * change password
+   *
+   * @param originPassword old password
+   * @param newPassword new password
+   * @return response
+   */
   @PutMapping("/password")
   public JsonResponse<Void> changePassword(
       @RequestParam("origin_password") String originPassword,

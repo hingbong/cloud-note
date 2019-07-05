@@ -68,9 +68,12 @@ public class NoteServiceImpl implements NoteService {
 
   @Override
   public List<Note> getAllSharedNotes() {
-    return noteMapper.findAllSharedNotes().parallelStream()
-        .sorted(Comparator.comparing(Note::getModifiedTime)).map(this::setIsDeletedToNull).collect(
-            Collectors.toList());
+    return noteMapper
+        .findAllSharedNotes()
+        .parallelStream()
+        .sorted(Comparator.comparing(Note::getModifiedTime))
+        .map(this::setIsDeletedToNull)
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -103,7 +106,9 @@ public class NoteServiceImpl implements NoteService {
     if (note1 == null || note1.getIsDeleted().equals(1)) {
       throw new NoteNotFoundException("错误的笔记");
     }
-    note.setIsShared(note1.getIsShared()).setIsDeleted(0).setModifiedTime(LocalDateTime.now())
+    note.setIsShared(note1.getIsShared())
+        .setIsDeleted(0)
+        .setModifiedTime(LocalDateTime.now())
         .setModifiedUser(username);
     Integer updateNote = noteMapper.updateNote(note);
     if (!updateNote.equals(1)) {
@@ -131,7 +136,6 @@ public class NoteServiceImpl implements NoteService {
     }
   }
 
-
   @Override
   public void unsetShared(Integer uid, String username, Integer nid) {
     updateCheck(uid, nid);
@@ -142,10 +146,9 @@ public class NoteServiceImpl implements NoteService {
     }
   }
 
-
   @Override
-  public void moveToDefault(Integer defaultNbid, Integer nowNbid) {
-    moveNoteToDefaultNotebook(defaultNbid, nowNbid);
+  public void moveToDefault(Integer defaultNbId, Integer nowNbId) {
+    moveNoteToDefaultNotebook(defaultNbId, nowNbId);
   }
 
   private void moveNoteToDefaultNotebook(Integer defaultNbid, Integer nowNbid) {
