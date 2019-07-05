@@ -11,6 +11,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,10 +23,10 @@ public class ShiroConfiguration {
 
   private static final int SECONDS_OF_DAY = 60 * 60 * 24;
 
-  @Bean
+  @Bean(name = "rememberMeCookie")
   public SimpleCookie rememberMeCookie() {
     SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-    simpleCookie.setMaxAge(30 * SECONDS_OF_DAY);
+    simpleCookie.setMaxAge(14 * SECONDS_OF_DAY);
     return simpleCookie;
   }
 
@@ -37,12 +38,31 @@ public class ShiroConfiguration {
     return cookieRememberMeManager;
   }
 
+  @Bean(name = "sessionIdCookie")
+  public SimpleCookie sessionIdCookie() {
+    SimpleCookie simpleCookie = new SimpleCookie("shiroSid");
+    simpleCookie.setMaxAge(14 * SECONDS_OF_DAY);
+    return simpleCookie;
+  }
+
+  @Bean
+  public DefaultWebSessionManager getDefaultWebSessionManager(
+      @Autowired SimpleCookie sessionIdCookie) {
+    DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+    sessionManager.setSessionIdCookie(sessionIdCookie);
+    sessionManager.setSessionIdCookieEnabled(true);
+    return sessionManager;
+  }
+
   @Bean
   public DefaultWebSecurityManager getSecurityManager(
-      @Autowired UserRealm realm, @Autowired RememberMeManager rememberMeManager) {
+      @Autowired UserRealm realm,
+      @Autowired RememberMeManager rememberMeManager,
+      @Autowired DefaultWebSessionManager defaultWebSessionManager) {
     DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
     securityManager.setRealm(realm);
     securityManager.setRememberMeManager(rememberMeManager);
+    securityManager.setSessionManager(defaultWebSessionManager);
     return securityManager;
   }
 

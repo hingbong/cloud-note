@@ -46,8 +46,8 @@ public class UserController extends BaseController {
       String username,
       String password,
       @RequestParam(value = "remember_me", required = false) String rememberMe) {
-    System.err.println(rememberMe);
-    userService.login(username, password, Boolean.valueOf(rememberMe));
+    String host = getSession().getHost();
+    userService.login(username, password, Boolean.valueOf(rememberMe), host);
     User user = new User().setUsername(getUsernameFromSession()).setUid(getUidFromSession());
     return JsonResponse.success("登录成功", user);
   }

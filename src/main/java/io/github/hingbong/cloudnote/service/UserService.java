@@ -22,14 +22,14 @@ public interface UserService {
    * @param username username
    * @param password password
    */
-  void login(String username, String password, Boolean rememberMe);
+  void login(String username, String password, Boolean rememberMe, String host);
 
   /**
    * change user's password
    *
-   * @param uid            user id
+   * @param uid user id
    * @param originPassword origin password
-   * @param newPassword    new password
+   * @param newPassword new password
    */
   void changePassword(Integer uid, String originPassword, String newPassword);
 

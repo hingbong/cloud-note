@@ -63,12 +63,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void login(String username, String password, Boolean rememberMe) {
+  public void login(String username, String password, Boolean rememberMe, String host) {
     if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
       throw new PasswordNotMatchException("用户名密码错误");
     }
     Subject subject = SecurityUtils.getSubject();
-    UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
+    UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe, host);
     try {
       subject.login(token);
     } catch (IncorrectCredentialsException e) {
