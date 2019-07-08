@@ -3,6 +3,7 @@ package io.github.hingbong.cloudnote.controller;
 import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.service.UserService;
 import io.github.hingbong.cloudnote.util.JsonResponse;
+import io.github.hingbong.cloudnote.util.UserUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,8 +49,7 @@ public class UserController extends BaseController {
       @RequestParam(value = "remember_me", required = false) String rememberMe) {
     String host = getSession().getHost();
     userService.login(username, password, Boolean.valueOf(rememberMe), host);
-    User user = new User().setUsername(getUsernameFromSession()).setUid(getUidFromSession());
-    return JsonResponse.success("登录成功", user);
+    return JsonResponse.success("登录成功", UserUtils.getCurrentUser());
   }
 
   /**
@@ -74,8 +74,7 @@ public class UserController extends BaseController {
   public JsonResponse<Void> changePassword(
       @RequestParam("origin_password") String originPassword,
       @RequestParam("new_password") String newPassword) {
-    Integer uid = getUidFromSession();
-    userService.changePassword(uid, originPassword, newPassword);
+    userService.changePassword(originPassword, newPassword);
     return JsonResponse.success("修改成功");
   }
 

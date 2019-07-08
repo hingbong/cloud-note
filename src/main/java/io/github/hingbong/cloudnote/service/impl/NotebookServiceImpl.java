@@ -11,6 +11,7 @@ import io.github.hingbong.cloudnote.service.excption.FormatNotMatchException;
 import io.github.hingbong.cloudnote.service.excption.InsertException;
 import io.github.hingbong.cloudnote.service.excption.NotebookNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
+import io.github.hingbong.cloudnote.util.UserUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,9 @@ public class NotebookServiceImpl implements NotebookService {
   private static final String NULL = "null";
 
   @Override
-  public void addNotebook(String title, String description, Integer uid) {
+  public void addNotebook(String title, String description) {
+    Integer uid = UserUtils.getCurrentUid();
+
     checkNotebook(title);
     checkUser(uid);
 
@@ -42,10 +45,17 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   @Override
-  public void modifyTitle(Integer nbId, String title, Integer uid) {
+  public void addNotebookForRegister(Integer uid, String title, String description) {
+    Notebook notebook = new Notebook(title, description, 0, uid);
+    insert(notebook);
+  }
+
+  @Override
+  public void modifyTitle(Integer nbId, String title) {
     if (title == null || title.isEmpty() || NULL.equals(title)) {
       return;
     }
+    Integer uid = UserUtils.getCurrentUid();
     checkNotebook(title);
     checkUserAndNotebook(uid, nbId);
 
@@ -55,17 +65,19 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   @Override
-  public void modifyDescription(Integer nbId, String description, Integer uid) {
+  public void modifyDescription(Integer nbId, String description) {
     if (description == null || description.isEmpty() || NULL.equals(description)) {
       return;
     }
+    Integer uid = UserUtils.getCurrentUid();
     checkUserAndNotebook(uid, nbId);
 
     updateDescription(nbId, description);
   }
 
   @Override
-  public List<Notebook> findAllByUid(Integer uid) {
+  public List<Notebook> findAllForCurrentUser() {
+    Integer uid = UserUtils.getCurrentUid();
     checkUser(uid);
     // get non-deleted notebook and set isDelete to null
     return selectAll(uid);
@@ -77,8 +89,9 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   @Override
-  public Notebook findByNbIdAndUid(Integer uid, Integer nbId) {
+  public Notebook findByNbIdAndCurrentUser(Integer nbId) {
     Notebook notebook = getNotebook(nbId);
+    Integer uid = UserUtils.getCurrentUid();
     if (notebook == null || notebook.getIsDeleted().equals(1) || !notebook.getUid().equals(uid)) {
       throw new NotebookNotFoundException("此记事本不存在");
     }
@@ -87,11 +100,12 @@ public class NotebookServiceImpl implements NotebookService {
   }
 
   @Override
-  @Transactional
-  public void delete(Integer uid, Integer nbId) {
+  @Transactional(rollbackFor = Exception.class)
+  public void delete(Integer nbId) {
+    Integer uid = UserUtils.getCurrentUid();
     checkUserAndNotebook(uid, nbId);
     Integer defaultNbId = checkDeleteDefault(nbId);
-    delete(nbId);
+    markDeleted(nbId);
 
     // when delete a notebook, move all notes to default
     noteService.moveToDefault(defaultNbId, nbId);
@@ -130,7 +144,7 @@ public class NotebookServiceImpl implements NotebookService {
     }
   }
 
-  private void delete(Integer nbId) {
+  private void markDeleted(Integer nbId) {
     Integer delete = notebookMapper.markDeleted(nbId);
     if (!delete.equals(1)) {
       throw new UpdateException("未知错误");

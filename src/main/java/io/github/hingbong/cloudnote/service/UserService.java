@@ -29,11 +29,10 @@ public interface UserService {
   /**
    * change user's password
    *
-   * @param uid user id
    * @param originPassword origin password
    * @param newPassword new password
    */
-  void changePassword(Integer uid, String originPassword, String newPassword);
+  void changePassword(String originPassword, String newPassword);
 
   /**
    * find user by user id

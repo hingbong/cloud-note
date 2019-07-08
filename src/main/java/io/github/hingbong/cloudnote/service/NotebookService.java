@@ -15,43 +15,47 @@ public interface NotebookService {
    *
    * @param title notebook title
    * @param description notebook description
-   * @param uid user id
    */
-  void addNotebook(String title, String description, Integer uid);
+  void addNotebook(String title, String description);
+
+  /**
+   * add a new notebook for register
+   *
+   * @param uid user id
+   * @param title notebook title
+   * @param description notebook description
+   */
+  void addNotebookForRegister(Integer uid, String title, String description);
 
   /**
    * change a new title
    *
    * @param nbId notebook id
    * @param title new title
-   * @param uid user id
    */
-  void modifyTitle(Integer nbId, String title, Integer uid);
+  void modifyTitle(Integer nbId, String title);
 
   /**
    * update notebook description
    *
-   * @param uid user id
    * @param description notebook description
    * @param nbId notebook id
    */
-  void modifyDescription(Integer nbId, String description, Integer uid);
+  void modifyDescription(Integer nbId, String description);
 
   /**
    * find all notebooks of a user
    *
-   * @param uid user id
    * @return all notebooks of a user
    */
-  List<Notebook> findAllByUid(Integer uid);
+  List<Notebook> findAllForCurrentUser();
 
   /**
    * delete a notebook
    *
-   * @param uid user id
    * @param nbId notebook id
    */
-  void delete(Integer uid, Integer nbId);
+  void delete(Integer nbId);
 
   /**
    * find notebook by notebook id
@@ -64,9 +68,8 @@ public interface NotebookService {
   /**
    * find notes by user and notebook
    *
-   * @param uid user id
    * @param nbId notebook id
    * @return response
    */
-  Notebook findByNbIdAndUid(Integer uid, Integer nbId);
+  Notebook findByNbIdAndCurrentUser(Integer nbId);
 }

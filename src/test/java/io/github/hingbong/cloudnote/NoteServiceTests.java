@@ -19,7 +19,7 @@ class NoteServiceTests {
     note.setContent("正文１");
     note.setIsShared(0);
     note.setNbId(1);
-    serivce.addNote(1, "root", note);
+    serivce.addNote(note);
   }
 
   @Autowired

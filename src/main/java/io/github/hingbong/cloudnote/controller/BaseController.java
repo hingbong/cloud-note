@@ -1,6 +1,5 @@
 package io.github.hingbong.cloudnote.controller;
 
-import io.github.hingbong.cloudnote.service.excption.SessionInvalidException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -42,41 +41,5 @@ public abstract class BaseController {
    */
   final Session getSession() {
     return getSubject().getSession();
-  }
-
-  /**
-   * get uid from session
-   *
-   * @return user id
-   */
-  final Integer getUidFromSession() {
-    Object uid = getSession().getAttribute("uid");
-    Subject subject = getSubject();
-    if (uid == null) {
-      // if browser have unknown cookie, remove it
-      if (subject.isRemembered()) {
-        SecurityUtils.getSubject().logout();
-      }
-      throw new SessionInvalidException("用户还未登录");
-    }
-    return Integer.valueOf(uid.toString());
-  }
-
-  /**
-   * get user name from session
-   *
-   * @return user name
-   */
-  final String getUsernameFromSession() {
-    Object username = getSession().getAttribute("username");
-    Subject subject = getSubject();
-    if (username == null) {
-      // if browser have unknown cookie, remove it
-      if (subject.isRemembered()) {
-        SecurityUtils.getSubject().logout();
-      }
-      throw new SessionInvalidException("用户还未登录");
-    }
-    return username.toString();
   }
 }

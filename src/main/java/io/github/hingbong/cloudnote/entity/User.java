@@ -1,5 +1,6 @@
 package io.github.hingbong.cloudnote.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,7 +13,9 @@ public class User implements Serializable {
 
   private Integer uid;
   private String username;
+  @JsonIgnore
   private String password;
+  @JsonIgnore
   private String salt;
 
   public Integer getUid() {

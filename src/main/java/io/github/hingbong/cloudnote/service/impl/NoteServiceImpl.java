@@ -12,6 +12,7 @@ import io.github.hingbong.cloudnote.service.excption.NoteNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.NotebookNotFoundException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
+import io.github.hingbong.cloudnote.util.UserUtils;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -31,7 +32,10 @@ public class NoteServiceImpl implements NoteService {
   private NotebookService notebookService;
 
   @Override
-  public void addNote(Integer uid, String username, Note note) {
+  public void addNote(Note note) {
+    Integer uid = UserUtils.getCurrentUid();
+    String username = UserUtils.getCurrentUsername();
+
     checkNote(note);
     Notebook notebook = notebookService.findByNbId(note.getNbId());
     checkNotebook(uid, note, notebook);
@@ -48,7 +52,7 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public List<Note> getNoteByNotebook(Integer uid, Integer nbId) {
+  public List<Note> getNoteByNotebook(Integer nbId) {
     if (nbId == null) {
       throw new NotebookNotFoundException("无此记事本");
     }
@@ -56,6 +60,8 @@ public class NoteServiceImpl implements NoteService {
     if (notebook == null) {
       throw new NotebookNotFoundException("无此记事本");
     }
+
+    Integer uid = UserUtils.getCurrentUid();
     if (!notebook.getUid().equals(uid)) {
       throw new UserNotFoundException("请选择正确的记事本");
     }
@@ -77,9 +83,10 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public Note getNoteByNid(Integer uid, Integer nid) {
+  public Note getNoteByNidAndCurrentUser(Integer nid) {
     Note note = getOneByNid(nid);
     Notebook notebook = notebookService.findByNbId(note.getNbId());
+    Integer uid = UserUtils.getCurrentUid();
     if (!uid.equals(notebook.getUid())) {
       throw new UserNotFoundException("请选择正确的笔记");
     }
@@ -92,7 +99,10 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public void modifyNote(Integer uid, String username, Note note) {
+  public void modifyNote(Note note) {
+    Integer uid = UserUtils.getCurrentUid();
+    String username = UserUtils.getCurrentUsername();
+
     if (note.getNbId() != null) {
       Notebook notebook = notebookService.findByNbId(note.getNbId());
       if (!uid.equals(notebook.getUid())) {
@@ -117,7 +127,10 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public void deleteNote(Integer uid, String username, Integer nid) {
+  public void deleteNote(Integer nid) {
+    Integer uid = UserUtils.getCurrentUid();
+    String username = UserUtils.getCurrentUsername();
+
     updateCheck(uid, nid);
 
     Integer markIsDeleted = noteMapper.markIsDeleted(nid, username, LocalDateTime.now());
@@ -127,7 +140,10 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public void setShared(Integer uid, String username, Integer nid) {
+  public void setShared(Integer nid) {
+    Integer uid = UserUtils.getCurrentUid();
+    String username = UserUtils.getCurrentUsername();
+
     updateCheck(uid, nid);
 
     Integer markIsShared = noteMapper.markIsShared(nid, username, LocalDateTime.now());
@@ -137,7 +153,10 @@ public class NoteServiceImpl implements NoteService {
   }
 
   @Override
-  public void unsetShared(Integer uid, String username, Integer nid) {
+  public void unsetShared(Integer nid) {
+    Integer uid = UserUtils.getCurrentUid();
+    String username = UserUtils.getCurrentUsername();
+
     updateCheck(uid, nid);
 
     Integer cancelShared = noteMapper.cancelShared(nid, username, LocalDateTime.now());

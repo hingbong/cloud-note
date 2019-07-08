@@ -1,10 +1,8 @@
 package io.github.hingbong.cloudnote.service.realm;
 
-import io.github.hingbong.cloudnote.configuration.ShiroConfiguration;
 import io.github.hingbong.cloudnote.entity.User;
 import io.github.hingbong.cloudnote.mapper.UserMapper;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,7 +12,6 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,10 +62,6 @@ public class UserRealm extends AuthorizingRealm {
     if (user == null) {
       throw new UserNotFoundException();
     }
-    Session session = SecurityUtils.getSubject().getSession();
-    session.setTimeout(ShiroConfiguration.SECONDS_OF_DAY * 30 * 1000L);
-    session.setAttribute("username", user.getUsername());
-    session.setAttribute("uid", user.getUid());
     return new SimpleAuthenticationInfo(
         user, user.getPassword(), ByteSource.Util.bytes(user.getSalt()), getClass().getName());
   }

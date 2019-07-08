@@ -10,6 +10,7 @@ import io.github.hingbong.cloudnote.service.excption.InsertException;
 import io.github.hingbong.cloudnote.service.excption.PasswordNotMatchException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
+import io.github.hingbong.cloudnote.util.UserUtils;
 import java.util.UUID;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
     // add a default notebook when user register
     String title = "默认笔记本";
     String description = "默认笔记本";
-    notebookService.addNotebook(title, description, uid);
+    notebookService.addNotebookForRegister(uid, title, description);
   }
 
   @Override
@@ -77,9 +78,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void changePassword(Integer uid, String originPassword, String newPassword) {
+  public void changePassword(String originPassword, String newPassword) {
     checkPasswordValid(originPassword, newPassword);
-
+    Integer uid = UserUtils.getCurrentUid();
     User user = findByUid(uid);
 
     String originSha256Password = getSha256Password(originPassword, user.getSalt());
