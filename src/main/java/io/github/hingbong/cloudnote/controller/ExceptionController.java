@@ -15,7 +15,8 @@ import io.github.hingbong.cloudnote.service.excption.SessionInvalidException;
 import io.github.hingbong.cloudnote.service.excption.UpdateException;
 import io.github.hingbong.cloudnote.service.excption.UserNotFoundException;
 import io.github.hingbong.cloudnote.util.JsonResponse;
-import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionController extends BaseController {
 
+  private final Logger logger = LoggerFactory.getLogger(getClass());
   /**
    * handle exception
    *
@@ -35,7 +37,7 @@ public class ExceptionController extends BaseController {
    */
   @ExceptionHandler(ServiceException.class)
   public JsonResponse exceptionHandler(final Throwable throwable) {
-    System.err.println(LocalDateTime.now() + " ==> " + throwable);
+    logger.error(throwable.toString());
     String msg = throwable.getMessage();
     int status;
     if (throwable instanceof FormatNotMatchException) {
