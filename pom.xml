@@ -12,11 +12,11 @@
   <groupId>io.github.hingbong</groupId>
   <artifactId>cloud-note</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Cloud-note</name>
+  <name>cloud-note</name>
   <description>cloud note system</description>
 
   <properties>
-    <java.version>11</java.version>
+    <java.version>12</java.version>
   </properties>
 
   <dependencies>
