@@ -29,7 +29,7 @@ public class ShiroConfiguration {
   /**
    * one day's seconds
    */
-  public static final int SECONDS_OF_DAY = 60 * 60 * 24;
+  private static final int SECONDS_OF_DAY = 60 * 60 * 24;
 
   /**
    * set remember me's cookie's max age
